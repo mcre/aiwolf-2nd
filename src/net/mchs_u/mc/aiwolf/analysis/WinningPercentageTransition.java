@@ -13,7 +13,7 @@ import java.util.Map;
 
 /**
  * @author m_cre
- * DirectStarterで生成されたresult
+ * DirectStarterで生成されたresultの推移をファイル出力する
  */
 public class WinningPercentageTransition {
 	private static final String RESULT_DIR = "./result/";
