@@ -10,7 +10,7 @@ public class McreRoleAssignPlayer extends AbstractRoleAssignPlayer {
 
 	@Override
 	public String getName() {
-		return null;
+		return "m_cre";
 	}
 
 }
