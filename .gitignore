@@ -1,4 +1,7 @@
+.DS_Store
 /bin/
 /lib/
 /players/
 /log/
+/result/
+/tmp/
