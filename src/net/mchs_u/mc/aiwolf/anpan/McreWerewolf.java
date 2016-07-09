@@ -14,13 +14,22 @@ import org.aiwolf.common.data.Role;
 import org.aiwolf.common.data.Species;
 import org.aiwolf.common.data.Talk;
 import org.aiwolf.common.net.GameInfo;
+import org.aiwolf.common.net.GameSetting;
 
 public class McreWerewolf extends AbstractWerewolf {
-	private Set<Agent> coSeerList = new HashSet<Agent>();
-	private List<Agent> divinedList = new ArrayList<Agent>();
+	private Set<Agent> coSeerList = null;
+	private List<Agent> divinedList = null;
+	
 	private boolean seerCo = false;
 	private boolean divinedToday = false;
 	
+	@Override
+	public void initialize(GameInfo gameInfo, GameSetting gameSetting) {
+		super.initialize(gameInfo, gameSetting);
+		
+		coSeerList = new HashSet<Agent>();
+		divinedList = new ArrayList<Agent>();
+	}
 	
 	@Override
 	public Agent attack() {
