@@ -49,7 +49,7 @@ public class DirectStarter {
 	public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		int set = 600;
 		int times = 100;
-		boolean isVisualize = false;
+		boolean isVisualize = true;
 		boolean isLog = false;
 		boolean isSaveResult = true;
 		
@@ -129,7 +129,10 @@ public class DirectStarter {
 					ContestResource resource = new ContestResource(game);
 					GameViewer gameViewer = new GameViewer(resource, game);
 					gameViewer.setAutoClose(true);
-					logger = new MultiGameLogger(logger, gameViewer);
+					if(logger == null)
+						logger = gameViewer;
+					else
+						logger = new MultiGameLogger(logger, gameViewer);
 				}
 				game.setGameLogger(logger);
 				game.start();

@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.aiwolf.client.lib.Utterance;
 import org.aiwolf.common.data.Agent;
-import org.aiwolf.common.data.Judge;
 import org.aiwolf.common.data.Role;
 import org.aiwolf.common.data.Species;
 import org.aiwolf.common.data.Talk;
@@ -30,6 +29,7 @@ public class Estimate {
 	private final static double RATE_NEVER_CO_FROM_POSSESSED = 0.1d;
 	private final static double RATE_ONLY_SEER_CO_FROM_WEREWOLF_TEAM = 0.01d;
 	private final static double RATE_ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM = 0.01d;
+	private final static double RATE_TEAM_MEMBER_WOLF = 0.5d;
 	
 	private List<Agent> agents = null;
 	
@@ -90,8 +90,8 @@ public class Estimate {
 		return villagerTeamLikeness;
 	}
 
-	//らしさを計算
-	public void calcLikeness(){
+	//らしさを再計算
+	private void calcLikeness(){
 		for(Agent a: agents){
 			werewolfLikeness.put(a, 0d);
 			villagerTeamLikeness.put(a, 0d);
@@ -116,7 +116,6 @@ public class Estimate {
 		}
 		updated = false;
 	}
-	
 	
 	//終了条件を満たしているパターン(狼が全滅してるのにゲームが終わってないなど)を削除
 	public void updateAliveAgentList(List<Agent> aliveAgents){		
@@ -157,20 +156,32 @@ public class Estimate {
 			remove(rr);
 	}
 	
-	//自分の占い結果以外の確率をゼロにする
-	public void updateMyJudgeResult(Judge judge){
+	//確定した人種（自分目線の占い結果など）以外の確率をゼロにする
+	public void updateDefinedSpecies(Agent agent, Species species){
 		Set<RoleCombination> reserveRemove = new HashSet<>();
 		for(RoleCombination rc: probabilities.keySet()){
-			if(judge.getResult() == Species.WEREWOLF){
-				if(!rc.isWolf(judge.getAgent()))
+			if(species == Species.WEREWOLF){
+				if(!rc.isWolf(agent))
 					reserveRemove.add(rc);
 			} else {
-				if(rc.isWolf(judge.getAgent()))
+				if(rc.isWolf(agent))
 					reserveRemove.add(rc);
 			}
 		}
 		for(RoleCombination rr:reserveRemove)
 			remove(rr);
+	}
+	
+	//仲間の狼の確率を下げる（身内切りのためゼロにはしない）（村人目線のときにつかう）
+	public void updateTeamMemberWolf(List<Agent> agents){
+		for(RoleCombination rc: probabilities.keySet()){
+			for(Agent a: agents){
+				if(rc.isWolf(a)){
+					update(rc, RATE_TEAM_MEMBER_WOLF);
+					break;
+				}
+			}
+		}
 	}
 	
 	public void updateVoteList(List<Vote> voteList){
@@ -338,6 +349,17 @@ public class Estimate {
 				count++;
 		}
 		return count;
+	}
+	
+	public void print(){
+		Map<Agent, Double> w = getWerewolfLikeness();
+		Map<Agent, Double> v = getVillagerTeamLikeness();
+		for(Agent a: agents){
+			System.out.print("[" + a.getAgentIdx() + "]\t");
+			System.out.printf("%.4f\t",w.get(a));
+			System.out.printf("%.4f\t",v.get(a));
+			System.out.printf("%.4f\n",1d - v.get(a) - w.get(a));
+		}
 	}
 	
 }
