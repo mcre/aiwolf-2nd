@@ -42,7 +42,7 @@ public class McreWerewolf extends AbstractMcreRole {
 		if(declaredAttackTarget != null && target.equals(declaredAttackTarget))
 			return TemplateWhisperFactory.skip();
 		declaredAttackTarget = target;
-		return TemplateTalkFactory.vote(target);
+		return TemplateWhisperFactory.attack(target);
 	}
 	
 	@Override

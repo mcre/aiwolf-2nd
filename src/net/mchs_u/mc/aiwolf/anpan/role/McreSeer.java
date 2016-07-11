@@ -37,7 +37,7 @@ public class McreSeer extends McreVillager {
 		}
 		
 		//占い結果を言ってなければ占い
-		Judge j = getLatestDayGameInfo().getMediumResult();
+		Judge j = getLatestDayGameInfo().getDivineResult();
 		if(!divinedToday && j != null){
 			divinedToday = true;
 			divinedList.add(j.getTarget());

@@ -36,7 +36,7 @@ public class McrePossessed extends AbstractMcreRole {
 		//COしてない場合はCO
 		if(!co){
 			co = true;
-			return TemplateTalkFactory.comingout(getMe(), Role.SEER);
+			return TemplateTalkFactory.comingout(getMe(), Role.MEDIUM);
 		}
 		
 		//占い結果を言ってなければ占い
