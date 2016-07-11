@@ -19,7 +19,7 @@ public class McreMedium extends McreVillager {
 		//COしてない場合はCO
 		if(!co){
 			co = true;
-			return TemplateTalkFactory.comingout(getMe(), Role.SEER);
+			return TemplateTalkFactory.comingout(getMe(), Role.MEDIUM);
 		}
 		
 		//今日霊能結果を言ってなくて霊能結果があれば霊能結果を言う
