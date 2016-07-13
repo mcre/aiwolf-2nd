@@ -49,7 +49,7 @@ public class DirectStarter {
 	public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		int set = 600;
 		int times = 100;
-		boolean isVisualize = true;
+		boolean isVisualize = false;
 		boolean isLog = false;
 		boolean isSaveResult = true;
 		

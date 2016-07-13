@@ -61,8 +61,8 @@ public class WinningPercentageTransition {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		String s = "1468135935382.txt";
-		String e = "1468163127892.txt";
+		String s = "1468256109123.txt";
+		String e = "1468299418268.txt";
 		WinningPercentageTransition wpt = new WinningPercentageTransition(s, e);
 		String csv = wpt.getCsv();
 		

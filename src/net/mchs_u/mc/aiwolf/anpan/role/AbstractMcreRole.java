@@ -19,8 +19,8 @@ import net.mchs_u.mc.aiwolf.anpan.Estimate;
 import net.mchs_u.mc.aiwolf.debug.EstimateGraph;
 
 public abstract class AbstractMcreRole extends AbstractRole {
-	private static final boolean DEBUG_ESTIMATE_GRAPH = true; //TODO 大会参加時は必ずFALSE
-	private static final boolean DEBUG_ESTIMATE_PRINT = true; //TODO 大会参加時は必ずFALSE
+	private static final boolean DEBUG_ESTIMATE_GRAPH = false; //TODO 大会参加時は必ずFALSE
+	private static final boolean DEBUG_ESTIMATE_PRINT = false; //TODO 大会参加時は必ずFALSE
 	
 	protected List<Agent> agents = null;
 	protected int readTalkNum = 0;
@@ -29,6 +29,8 @@ public abstract class AbstractMcreRole extends AbstractRole {
 	protected Estimate pretendVillagerEstimate = null; //村人目線
 	
 	private List<EstimateGraph> estimateGraphs = null;
+	
+	private List<Double> random = null; //min,maxを選ぶ際に、同率のうちどれを優先にするかを乱数で決める。
 
 	@Override
 	public void initialize(GameInfo gameInfo, GameSetting gameSetting) {
@@ -45,6 +47,11 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		
 		initDebugEstimateGraph();
 		debugEstimateRefresh();
+		
+		random = new ArrayList<>();
+		for(int i = 0; i < 15; i++){
+			random.add(Math.random() / 100000d);
+		}
 	}	
 	
 	@Override
@@ -112,24 +119,38 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		return agents.get(num);
 	}
 	
-	protected Agent min(List<Agent> candidate, Map<Agent, Double> likeness){
+	protected Agent min(List<Agent> candidate, Map<Agent, Double> likeness, boolean plus){
 		Agent ret = null;
 		double min = 2d;
-		for(Agent a: candidate){
-			if(min > likeness.get(a)){
-				min = likeness.get(a);
+		for(int i = 0; i < candidate.size(); i++){
+			Agent a = candidate.get(i);
+			double l = likeness.get(a);
+			if(plus)
+				l += random.get(i);
+			else
+				l -= random.get(i);
+			
+			if(min > l){
+				min = l;
 				ret = a;
 			}
 		}
 		return ret;
 	}
 	
-	protected Agent max(List<Agent> candidate, Map<Agent, Double> likeness){
+	protected Agent max(List<Agent> candidate, Map<Agent, Double> likeness, boolean plus){//村人らしさをプラス、人狼らしさをマイナス
 		Agent ret = null;
 		double max = -1;
-		for(Agent a: candidate){
-			if(max < likeness.get(a)){
-				max = likeness.get(a);
+		for(int i = 0; i < candidate.size(); i++){
+			Agent a = candidate.get(i);
+			double l = likeness.get(a);
+			if(plus)
+				l += random.get(i);
+			else
+				l -= random.get(i);
+			
+			if(max < l){
+				max = l;
 				ret = a;
 			}
 		}
@@ -144,7 +165,7 @@ public abstract class AbstractMcreRole extends AbstractRole {
 			
 			JFrame f = new JFrame("debug");
 			f.setSize(400, 800);
-			f.setLocation(1060, 0);
+			f.setLocation(1030, 0);
 			
 			GridLayout gl = new GridLayout(3,1);
 			gl.setVgap(50);

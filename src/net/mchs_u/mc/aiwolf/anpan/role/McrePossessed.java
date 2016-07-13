@@ -74,7 +74,7 @@ public class McrePossessed extends AbstractMcreRole {
 		for(Agent a:divinedList){
 			candidate.remove(a);
 		}
-		return max(candidate, pretendVillagerEstimate.getWerewolfLikeness());
+		return max(candidate, pretendVillagerEstimate.getWerewolfLikeness(), false);
 	}
 	
 	//投票対象を決める
@@ -83,7 +83,7 @@ public class McrePossessed extends AbstractMcreRole {
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
 		
-		return max(candidate, pretendVillagerEstimate.getWerewolfLikeness());
+		return max(candidate, pretendVillagerEstimate.getWerewolfLikeness(), false);
 	}
 
 }

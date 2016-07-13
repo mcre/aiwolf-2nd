@@ -75,7 +75,7 @@ public class McreWerewolf extends AbstractMcreRole {
 			candidate.remove(a);
 		}
 
-		return min(candidate, objectiveEstimate.getWerewolfLikeness());
+		return min(candidate, objectiveEstimate.getWerewolfLikeness(), false);
 	}
 	
 	//投票対象を決める
@@ -84,7 +84,7 @@ public class McreWerewolf extends AbstractMcreRole {
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
 		
-		return max(candidate, pretendVillagerEstimate.getWerewolfLikeness());
+		return max(candidate, pretendVillagerEstimate.getWerewolfLikeness(), false);
 	}
 	
 	private List<Agent> getWolfList(){

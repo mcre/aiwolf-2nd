@@ -18,6 +18,6 @@ public class McreBodyguard extends McreVillager {
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
 		
-		return max(candidate, subjectiveEstimate.getVillagerTeamLikeness());
+		return max(candidate, subjectiveEstimate.getVillagerTeamLikeness(), true);
 	}
 }

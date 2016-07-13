@@ -37,6 +37,6 @@ public class McreVillager extends AbstractMcreRole {
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
 		
-		return max(candidate, subjectiveEstimate.getWerewolfLikeness());
+		return max(candidate, subjectiveEstimate.getWerewolfLikeness(), false);
 	}
 }
