@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class WinningPercentageTransition {
 		
 		File dir = new File(RESULT_DIR);
 		File[] files = dir.listFiles();
+		Arrays.sort(files);
 
 		for(File f: files){			
 			String n = f.getName();
