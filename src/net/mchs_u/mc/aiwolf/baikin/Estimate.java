@@ -271,10 +271,12 @@ public class Estimate {
 				}
 			}
 
-			//狂人がCO
-			for(RoleCombination rc: probabilities.keySet()){
-				if(rc.isPossessed(talk.getAgent())){
-					restore(rc, RATE_NEVER_CO_FROM_POSSESSED);
+			//狂人がCO(霊能か占い）
+			if(ut.getRole() == Role.MEDIUM || ut.getRole() == Role.SEER){
+				for(RoleCombination rc: probabilities.keySet()){
+					if(rc.isPossessed(talk.getAgent())){
+						restore(rc, RATE_NEVER_CO_FROM_POSSESSED);
+					}
 				}
 			}
 			
