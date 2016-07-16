@@ -14,6 +14,8 @@ import org.aiwolf.common.data.Species;
 import org.aiwolf.common.data.Talk;
 import org.aiwolf.common.data.Vote;
 
+import net.mchs_u.mc.aiwolf.baikin.RoleCombination;
+
 public class Estimate {
 	private final static double RATE_VOTE_POSSESSED_TO_WEREWOLF = 0.9d;
 	private final static double RATE_VOTE_WEREWOLF_TO_POSSESSED = 0.9d;
@@ -271,10 +273,12 @@ public class Estimate {
 				}
 			}
 
-			//狂人がCO
-			for(RoleCombination rc: probabilities.keySet()){
-				if(rc.isPossessed(talk.getAgent())){
-					restore(rc, RATE_NEVER_CO_FROM_POSSESSED);
+			//狂人がCO(霊能か占い）
+			if(ut.getRole() == Role.MEDIUM || ut.getRole() == Role.SEER){
+				for(RoleCombination rc: probabilities.keySet()){
+					if(rc.isPossessed(talk.getAgent())){
+						restore(rc, RATE_NEVER_CO_FROM_POSSESSED);
+					}
 				}
 			}
 			
