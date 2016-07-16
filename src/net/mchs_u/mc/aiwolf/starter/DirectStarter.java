@@ -49,12 +49,13 @@ public class DirectStarter {
 	public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		int set = 600;
 		int times = 100;
-		boolean isVisualize = false;
+		boolean isVisualize = true;
 		boolean isLog = false;
 		boolean isSaveResult = true;
 		
 		List<Pair<String, Role>> players = new ArrayList<>();
 		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.anpan.McreRoleAssignPlayer", null));
+		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", Role.SEER));
 		players.add(new Pair<String, Role>("org.aiwolf.kajiClient.player.KajiRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("jp.ac.tohoku.ecei.shino.takaaki_okawa.agent.KatakanaRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("com.si.maekawa.MaekawaRoleAssignPlayer", null));
@@ -67,7 +68,7 @@ public class DirectStarter {
 		players.add(new Pair<String, Role>("com.carlo.aiwolf.bayes.player.BayesPlayer", null));
 		players.add(new Pair<String, Role>("aaaaa.aaaaaaa.aaaaa.Router", null));
 		players.add(new Pair<String, Role>("jp.ac.aitech.k13009kk.aiwolf.client.player.AndoRoleAssignPlayer", null));
-		players.add(new Pair<String, Role>("com.gmail.the.seventh.layers.RoleAssignPlayer", null));
+		//players.add(new Pair<String, Role>("com.gmail.the.seventh.layers.RoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("tkAI.tkAIPlayer", null));
 		
 		DirectStarter ds = new DirectStarter(players,times,set,isVisualize,isLog,isSaveResult);

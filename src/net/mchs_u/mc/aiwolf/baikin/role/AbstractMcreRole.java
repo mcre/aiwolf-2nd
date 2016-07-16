@@ -1,4 +1,4 @@
-package net.mchs_u.mc.aiwolf.anpan.role;
+package net.mchs_u.mc.aiwolf.baikin.role;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -15,12 +15,12 @@ import org.aiwolf.common.data.Talk;
 import org.aiwolf.common.net.GameInfo;
 import org.aiwolf.common.net.GameSetting;
 
-import net.mchs_u.mc.aiwolf.anpan.Estimate;
+import net.mchs_u.mc.aiwolf.baikin.Estimate;
 import net.mchs_u.mc.aiwolf.debug.EstimateGraph;
 
 public abstract class AbstractMcreRole extends AbstractRole {
-	private static final boolean DEBUG_ESTIMATE_GRAPH = false; //TODO 大会参加時は必ずFALSE
-	private static final boolean DEBUG_ESTIMATE_PRINT = false; //TODO 大会参加時は必ずFALSE
+	private static final boolean DEBUG_ESTIMATE_GRAPH = true; //TODO 大会参加時は必ずFALSE
+	private static final boolean DEBUG_ESTIMATE_PRINT = true; //TODO 大会参加時は必ずFALSE
 	
 	protected List<Agent> agents = null;
 	protected int readTalkNum = 0;
