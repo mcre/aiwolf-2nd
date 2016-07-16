@@ -33,7 +33,7 @@ import org.aiwolf.ui.util.AgentLibraryReader;
  */
 @SuppressWarnings("deprecation")
 public class DirectStarter {
-	public static final boolean IS_VISUALIZE = true; // TODO 大会時はFALSE
+	public static final boolean IS_VISUALIZE = false; // TODO 大会時はFALSE
 	
 	private static final String LOG_DIR = "./log/";
 	private static final String RESULT_DIR = "./result/";

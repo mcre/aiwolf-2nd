@@ -19,8 +19,8 @@ import net.mchs_u.mc.aiwolf.anpan.Estimate;
 import net.mchs_u.mc.aiwolf.debug.EstimateGraph;
 
 public abstract class AbstractMcreRole extends AbstractRole {
-	private static final boolean DEBUG_ESTIMATE_GRAPH = false; //TODO 大会参加時は必ずFALSE
-	private static final boolean DEBUG_ESTIMATE_PRINT = false; //TODO 大会参加時は必ずFALSE
+	private static final boolean DEBUG_ESTIMATE_GRAPH = false;
+	private static final boolean DEBUG_ESTIMATE_PRINT = false;
 	
 	protected List<Agent> agents = null;
 	protected int readTalkNum = 0;
