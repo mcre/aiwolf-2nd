@@ -363,5 +363,29 @@ public class Estimate {
 			System.out.printf("%.4f\n",1d - v.get(a) - w.get(a));
 		}
 	}
+
+	public Set<Agent> getCoSeerSet() {
+		return coSeerSet;
+	}
+
+	public void setCoSeerSet(Set<Agent> coSeerSet) {
+		this.coSeerSet = coSeerSet;
+	}
+
+	public Set<Agent> getCoMediumSet() {
+		return coMediumSet;
+	}
+
+	public void setCoMediumSet(Set<Agent> coMediumSet) {
+		this.coMediumSet = coMediumSet;
+	}
+
+	public Set<Agent> getCoBodyguardSet() {
+		return coBodyguardSet;
+	}
+
+	public void setCoBodyguardSet(Set<Agent> coBodyguardSet) {
+		this.coBodyguardSet = coBodyguardSet;
+	}
 	
 }

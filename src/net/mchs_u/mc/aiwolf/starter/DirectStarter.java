@@ -33,7 +33,7 @@ import org.aiwolf.ui.util.AgentLibraryReader;
  */
 @SuppressWarnings("deprecation")
 public class DirectStarter {
-	public static final boolean IS_VISUALIZE = false; // TODO 大会時はFALSE
+	public static final boolean IS_VISUALIZE = true; // TODO 大会時はFALSE
 	
 	private static final String LOG_DIR = "./log/";
 	private static final String RESULT_DIR = "./result/";
@@ -58,8 +58,8 @@ public class DirectStarter {
 		
 		List<Pair<String, Role>> players = new ArrayList<>();
 		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.anpan.McreRoleAssignPlayer", null));
-		//players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", Role.SEER));
-		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", null));
+		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", Role.SEER));
+		//players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("org.aiwolf.kajiClient.player.KajiRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("jp.ac.tohoku.ecei.shino.takaaki_okawa.agent.KatakanaRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("com.si.maekawa.MaekawaRoleAssignPlayer", null));

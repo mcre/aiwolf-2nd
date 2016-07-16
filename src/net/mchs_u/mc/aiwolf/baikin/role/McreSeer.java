@@ -62,7 +62,18 @@ public class McreSeer extends McreVillager {
 		for(Agent a:divinedList){
 			candidate.remove(a);
 		}
-		return max(candidate, subjectiveEstimate.getWerewolfLikeness(), false);
+		
+		List<Agent> tmp = candidate;
+
+		//占い師COした人は除く
+		for(Agent a:subjectiveEstimate.getCoSeerSet()){
+			candidate.remove(a);
+		}
+		if(candidate.size() == 0)
+			//誰も占う人が居ない場合のみ占い師COの人を占う
+			return max(tmp, subjectiveEstimate.getWerewolfLikeness(), false);
+		else
+			return max(candidate, subjectiveEstimate.getWerewolfLikeness(), false);
 	}
 
 }
