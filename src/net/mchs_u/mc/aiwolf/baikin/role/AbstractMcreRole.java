@@ -17,10 +17,11 @@ import org.aiwolf.common.net.GameSetting;
 
 import net.mchs_u.mc.aiwolf.baikin.Estimate;
 import net.mchs_u.mc.aiwolf.debug.EstimateGraph;
+import net.mchs_u.mc.aiwolf.starter.DirectStarter;
 
 public abstract class AbstractMcreRole extends AbstractRole {
-	private static final boolean DEBUG_ESTIMATE_GRAPH = true; //TODO 大会参加時は必ずFALSE
-	private static final boolean DEBUG_ESTIMATE_PRINT = true; //TODO 大会参加時は必ずFALSE
+	private static final boolean DEBUG_ESTIMATE_GRAPH = DirectStarter.IS_VISUALIZE; //TODO 大会参加時は必ずFALSE
+	private static final boolean DEBUG_ESTIMATE_PRINT = false; //TODO 大会参加時は必ずFALSE
 	
 	protected List<Agent> agents = null;
 	protected int readTalkNum = 0;
