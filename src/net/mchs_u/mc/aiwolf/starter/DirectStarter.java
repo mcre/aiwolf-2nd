@@ -33,12 +33,12 @@ import org.aiwolf.ui.util.AgentLibraryReader;
  */
 @SuppressWarnings("deprecation")
 public class DirectStarter {
-	public static final boolean IS_VISUALIZE = true; // TODO 大会時はFALSE
+	public static final boolean IS_VISUALIZE = false; // TODO 大会時はFALSE
 	
 	private static final String LOG_DIR = "./log/";
 	private static final String RESULT_DIR = "./result/";
 	
-	private int gameNum,setNum;
+	private int gameNum, setNum;
 	private List<Pair<String, Role>> players;
 	@SuppressWarnings("rawtypes")
 	private Map<String, Class> playerClassMap;
@@ -49,17 +49,20 @@ public class DirectStarter {
 	private Map<String, Counter<Role>> winCounterMap;
 	private Map<String, Counter<Role>> roleCounterMap;
 	
+	private Map<String,Double> myAgentEstimateRates = null;
+	
 	public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-		int set = 600;
+		int set = 50;
 		int times = 100;
 		boolean isVisualize = IS_VISUALIZE;
 		boolean isLog = false;
 		boolean isSaveResult = true;
+		boolean isMontecarlo = true;
 		
 		List<Pair<String, Role>> players = new ArrayList<>();
 		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.anpan.McreRoleAssignPlayer", null));
-		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", Role.SEER));
-		//players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", null));
+		//players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", Role.SEER));
+		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("org.aiwolf.kajiClient.player.KajiRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("jp.ac.tohoku.ecei.shino.takaaki_okawa.agent.KatakanaRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("com.si.maekawa.MaekawaRoleAssignPlayer", null));
@@ -75,18 +78,40 @@ public class DirectStarter {
 		//players.add(new Pair<String, Role>("com.gmail.the.seventh.layers.RoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("tkAI.tkAIPlayer", null));
 		
-		DirectStarter ds = new DirectStarter(players,times,set,isVisualize,isLog,isSaveResult);
-		ds.start();
+		Map<String,Double> rates = null;
+		while(true){
+			if(isMontecarlo){
+				rates = new HashMap<>();
+				rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , Math.random());
+				rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , Math.random());
+				rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , Math.random());
+				rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , Math.random());
+				rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , Math.random());
+				rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", Math.random());
+				rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", Math.random());
+				rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , Math.random());
+				rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , Math.random());
+				rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , Math.random());
+				rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , Math.random());
+				rates.put("NEVER_CO_FROM_POSSESSED"            , Math.random());
+				rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , Math.random());
+				rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , Math.random());
+				rates.put("TEAM_MEMBER_WOLF"                   , Math.random());
+			}
+			DirectStarter ds = new DirectStarter(players, times, set, isVisualize, isLog, isSaveResult, rates);
+			ds.start();
+		}
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public DirectStarter(List<Pair<String, Role>> players,int gameNum,int setNum,boolean isVisualize,boolean isLog,boolean isSaveResult) throws IOException {
+	public DirectStarter(List<Pair<String, Role>> players, int gameNum, int setNum, boolean isVisualize, boolean isLog, boolean isSaveResult, Map<String, Double> rates) throws IOException {
 		this.gameNum = gameNum;
 		this.setNum = setNum;
 		this.isVisualize = isVisualize;
 		this.players = players;
 		this.isLog = isLog;
 		this.isSaveResult = isSaveResult;
+		this.myAgentEstimateRates = rates;
 
 		playerClassMap = new HashMap<String, Class>();
 		for(File file:AgentLibraryReader.getJarFileList(new File("./players"))){
@@ -111,7 +136,11 @@ public class DirectStarter {
 				player = (Player)playerClassMap.get(clsName).newInstance();
 			}
 			else{
-				player = (Player)Class.forName(clsName).newInstance();
+				if(clsName.equals("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer") && myAgentEstimateRates != null){
+					player = new net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer(myAgentEstimateRates);
+				}else{
+					player = (Player)Class.forName(clsName).newInstance();
+				}
 			}
 			map.put(player,role);
 		}
@@ -119,7 +148,6 @@ public class DirectStarter {
 	}
 	
 	public void start() throws InstantiationException, IllegalAccessException, ClassNotFoundException, IOException{
-		
 		for(int i = 0; i < setNum; i++){
 			game = null;
 			
@@ -167,6 +195,11 @@ public class DirectStarter {
 		StringBuffer s = new StringBuffer();
 		
 		s.append("set : " + set + "\n");
+		if(myAgentEstimateRates != null){
+			for(String key: myAgentEstimateRates.keySet()){
+				s.append("*\t" + key + "\t" + myAgentEstimateRates.get(key) + "\n");
+			}
+		}
 		s.append("       ");
 		
 		for(Role role:Role.values()){

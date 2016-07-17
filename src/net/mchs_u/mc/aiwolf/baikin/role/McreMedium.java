@@ -1,5 +1,7 @@
 package net.mchs_u.mc.aiwolf.baikin.role;
 
+import java.util.Map;
+
 import org.aiwolf.client.lib.TemplateTalkFactory;
 import org.aiwolf.common.data.Judge;
 import org.aiwolf.common.data.Role;
@@ -7,6 +9,14 @@ import org.aiwolf.common.data.Role;
 public class McreMedium extends McreVillager {
 	private boolean co = false;
 	private boolean inquestedToday = false;
+
+	public McreMedium() {
+		super();
+	}
+	
+	public McreMedium(Map<String,Double> estimateRates) {
+		super(estimateRates);
+	}
 	
 	@Override
 	public void dayStart() {

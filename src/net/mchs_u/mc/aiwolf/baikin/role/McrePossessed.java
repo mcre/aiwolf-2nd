@@ -2,6 +2,7 @@ package net.mchs_u.mc.aiwolf.baikin.role;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.aiwolf.client.lib.TemplateTalkFactory;
 import org.aiwolf.common.data.Agent;
@@ -16,6 +17,14 @@ public class McrePossessed extends AbstractMcreRole {
 	private boolean co = false;
 	private boolean divinedToday = false;
 	private List<Agent> divinedList = null;
+
+	public McrePossessed() {
+		super();
+	}
+	
+	public McrePossessed(Map<String,Double> estimateRates) {
+		super(estimateRates);
+	}
 	
 	@Override
 	public void initialize(GameInfo gameInfo, GameSetting gameSetting) {

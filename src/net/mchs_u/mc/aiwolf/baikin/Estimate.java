@@ -15,21 +15,7 @@ import org.aiwolf.common.data.Talk;
 import org.aiwolf.common.data.Vote;
 
 public class Estimate {
-	private final static double RATE_VOTE_POSSESSED_TO_WEREWOLF = 0.9d;
-	private final static double RATE_VOTE_WEREWOLF_TO_POSSESSED = 0.9d;
-	private final static double RATE_VOTE_WEREWOLF_TO_WEREWOLF = 0.9d;
-	private final static double RATE_FALSE_INQUESTED_FROM_VILLAGER_TEAM = 0.01d;
-	private final static double RATE_FALSE_DIVINED_FROM_VILLAGER_TEAM = 0.01d;
-	private final static double RATE_BLACK_DIVINED_POSSESSED_TO_WEREWOLF = 0.9d;
-	private final static double RATE_BLACK_DIVINED_WEREWOLF_TO_POSSESSED = 0.5d;
-	private final static double RATE_BLACK_DIVINED_WEREWOLF_TO_WEREWOLF = 0.1d;
-	private final static double RATE_2_SEER_CO_FROM_VILLGER_TEAM = 0.001d;
-	private final static double RATE_2_MEDIUM_CO_FROM_VILLAGER_TEAM = 0.001d;
-	private final static double RATE_2_BODYGUARD_CO_FROM_VILLAGER_TEAM = 0.001d;
-	private final static double RATE_NEVER_CO_FROM_POSSESSED = 0.1d;
-	private final static double RATE_ONLY_SEER_CO_FROM_WEREWOLF_TEAM = 0.01d;
-	private final static double RATE_ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM = 0.01d;
-	private final static double RATE_TEAM_MEMBER_WOLF = 0.5d;
+	private Map<String,Double> rates = null;
 	
 	private List<Agent> agents = null;
 	
@@ -43,14 +29,38 @@ public class Estimate {
 	
 	private Map<Agent, Double> werewolfLikeness = null;
 	private Map<Agent, Double> villagerTeamLikeness = null;
+
+	private static Map<String,Double> getDefaultRates(){
+		Map<String,Double> rates = new HashMap<>();
+		rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
+		rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
+		rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
+		rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
+		rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
+		rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
+		rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
+		rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
+		rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
+		rates.put("NEVER_CO_FROM_POSSESSED"            , 0.100d);
+		rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
+		rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
+		rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+		return rates;
+	}
 	
 	public Estimate(List<Agent> agents, Agent me) {
+		this(agents,me,getDefaultRates());
+	}
+	
+	public Estimate(List<Agent> agents, Agent me, Map<String,Double> rates) {
 		if(agents.size() != 15){
 			return;
 		}
-		
 		this.agents = agents;
-		
+		this.rates = rates;
+				
 		coSeerSet = new HashSet<>();
 		coMediumSet = new HashSet<>();
 		coBodyguardSet = new HashSet<>();
@@ -74,7 +84,7 @@ public class Estimate {
 		
 		// 狂人がCOしていない
 		for(RoleCombination rc: probabilities.keySet()){
-			update(rc, RATE_NEVER_CO_FROM_POSSESSED);
+			update(rc, "NEVER_CO_FROM_POSSESSED");
 		}
 	}
 	
@@ -177,7 +187,7 @@ public class Estimate {
 		for(RoleCombination rc: probabilities.keySet()){
 			for(Agent a: agents){
 				if(rc.isWolf(a)){
-					update(rc, RATE_TEAM_MEMBER_WOLF);
+					update(rc, "TEAM_MEMBER_WOLF");
 					break;
 				}
 			}
@@ -189,13 +199,13 @@ public class Estimate {
 			for(RoleCombination rc: probabilities.keySet()){
 				// 狂人から人狼への投票
 				if(rc.isPossessed(v.getAgent()) && rc.isWolf(v.getTarget()))
-					update(rc, RATE_VOTE_POSSESSED_TO_WEREWOLF);
+					update(rc, "VOTE_POSSESSED_TO_WEREWOLF");
 				// 人狼から狂人への投票
 				else if(rc.isWolf(v.getAgent()) && rc.isPossessed(v.getTarget()))
-					update(rc, RATE_VOTE_WEREWOLF_TO_POSSESSED);
+					update(rc, "VOTE_WEREWOLF_TO_POSSESSED");
 				// 人狼から人狼への投票
 				else if(rc.isWolf(v.getAgent()) && rc.isWolf(v.getTarget()))
-					update(rc, RATE_VOTE_WEREWOLF_TO_WEREWOLF);
+					update(rc, "VOTE_WEREWOLF_TO_WEREWOLF");
 			}
 		}
 	}	
@@ -234,7 +244,7 @@ public class Estimate {
 					if(rc.isVillagerTeam(talk.getAgent())){
 						// 村人陣営から二人目の狩人CO
 						if(countVillagerTeam(rc, coBodyguardSet) == 2)
-							update(rc, RATE_2_BODYGUARD_CO_FROM_VILLAGER_TEAM);
+							update(rc, "2_BODYGUARD_CO_FROM_VILLAGER_TEAM");
 					}
 				}
 			}else if(ut.getRole() == Role.SEER){
@@ -243,14 +253,14 @@ public class Estimate {
 					if(rc.isVillagerTeam(talk.getAgent())){
 						// 村人陣営から二人目の占いCO
 						if(countVillagerTeam(rc, coSeerSet) == 2)
-							update(rc, RATE_2_SEER_CO_FROM_VILLGER_TEAM);
+							update(rc, "2_SEER_CO_FROM_VILLGER_TEAM");
 						// 既に人狼陣営が占いCOしている状態での初めての村人陣営占いCO(①を解除)
 						if(countWereWolfTeam(rc, coSeerSet) > 0 && countVillagerTeam(rc, coSeerSet) == 1)
-							restore(rc, RATE_ONLY_SEER_CO_FROM_WEREWOLF_TEAM);
+							restore(rc, "ONLY_SEER_CO_FROM_WEREWOLF_TEAM");
 					}else{
 						// 村人陣営が占いCOしていない状態で初めての人狼陣営占いCO(①)
 						if(countVillagerTeam(rc, coSeerSet) < 1 && countWereWolfTeam(rc, coSeerSet) == 1)
-							update(rc, RATE_ONLY_SEER_CO_FROM_WEREWOLF_TEAM);
+							update(rc, "ONLY_SEER_CO_FROM_WEREWOLF_TEAM");
 					}
 				}
 			}else if(ut.getRole() == Role.MEDIUM){
@@ -259,14 +269,14 @@ public class Estimate {
 					if(rc.isVillagerTeam(talk.getAgent())){
 						// 村人陣営から二人目の霊能CO
 						if(countVillagerTeam(rc, coMediumSet) == 2)
-							update(rc, RATE_2_MEDIUM_CO_FROM_VILLAGER_TEAM);
+							update(rc, "2_MEDIUM_CO_FROM_VILLAGER_TEAM");
 						// 既に人狼陣営が霊能COしている状態での初めての村人陣営霊能CO(②を解除)
 						if(countWereWolfTeam(rc, coMediumSet) > 0 && countVillagerTeam(rc, coMediumSet) == 1)
-							restore(rc, RATE_ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM);
+							restore(rc, "ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM");
 					}else{
 						// 村人陣営が霊能COしていない状態で初めての人狼陣営霊能CO(②)
 						if(countVillagerTeam(rc, coMediumSet) < 1 && countWereWolfTeam(rc, coMediumSet) == 1)
-							update(rc, RATE_ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM);
+							update(rc, "ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM");
 					}
 				}
 			}
@@ -275,7 +285,7 @@ public class Estimate {
 			if(ut.getRole() == Role.MEDIUM || ut.getRole() == Role.SEER){
 				for(RoleCombination rc: probabilities.keySet()){
 					if(rc.isPossessed(talk.getAgent())){
-						restore(rc, RATE_NEVER_CO_FROM_POSSESSED);
+						restore(rc, "NEVER_CO_FROM_POSSESSED");
 					}
 				}
 			}
@@ -285,19 +295,19 @@ public class Estimate {
 			for(RoleCombination rc: probabilities.keySet()){
 				//狂人が人狼に黒出し
 				if(rc.isPossessed(talk.getAgent()) && rc.isWolf(ut.getTarget()))
-					update(rc, RATE_BLACK_DIVINED_POSSESSED_TO_WEREWOLF);
+					update(rc, "BLACK_DIVINED_POSSESSED_TO_WEREWOLF");
 				//人狼が狂人に黒出し
 				else if(rc.isWolf(talk.getAgent()) && rc.isPossessed(ut.getTarget()))
-					update(rc, RATE_BLACK_DIVINED_WEREWOLF_TO_POSSESSED);
+					update(rc, "BLACK_DIVINED_WEREWOLF_TO_POSSESSED");
 				//人狼が人狼に黒出し
 				else if(rc.isWolf(talk.getAgent()) && rc.isWolf(ut.getTarget()))
-					update(rc, RATE_BLACK_DIVINED_WEREWOLF_TO_WEREWOLF);	
+					update(rc, "BLACK_DIVINED_WEREWOLF_TO_WEREWOLF");	
 				//村人陣営が嘘の占い
 				else if(rc.isVillagerTeam(talk.getAgent())){
 					if(rc.isWolf(ut.getTarget()) && ut.getResult() == Species.HUMAN){
-						update(rc, RATE_FALSE_DIVINED_FROM_VILLAGER_TEAM);
+						update(rc, "FALSE_DIVINED_FROM_VILLAGER_TEAM");
 					}else if(!rc.isWolf(ut.getTarget()) && ut.getResult() == Species.WEREWOLF){
-						update(rc, RATE_FALSE_DIVINED_FROM_VILLAGER_TEAM);
+						update(rc, "FALSE_DIVINED_FROM_VILLAGER_TEAM");
 					}
 				}
 			}			
@@ -307,9 +317,9 @@ public class Estimate {
 				//村人陣営が嘘の霊能
 				if(rc.isVillagerTeam(talk.getAgent())){
 					if(rc.isWolf(ut.getTarget()) && ut.getResult() == Species.HUMAN){
-						update(rc, RATE_FALSE_INQUESTED_FROM_VILLAGER_TEAM);
+						update(rc, "FALSE_INQUESTED_FROM_VILLAGER_TEAM");
 					}else if(!rc.isWolf(ut.getTarget()) && ut.getResult() == Species.WEREWOLF){
-						update(rc, RATE_FALSE_INQUESTED_FROM_VILLAGER_TEAM);
+						update(rc, "FALSE_INQUESTED_FROM_VILLAGER_TEAM");
 					}
 				}
 			}
@@ -320,13 +330,13 @@ public class Estimate {
 			
 	}
 	
-	private void update(RoleCombination rc, double rate){
-		probabilities.put(rc, probabilities.get(rc) * rate);
+	private void update(RoleCombination rc, String rateKey){
+		probabilities.put(rc, probabilities.get(rc) * rates.get(rateKey));
 		updated = true;
 	}
 	
-	private void restore(RoleCombination rc, double rate){
-		probabilities.put(rc, probabilities.get(rc) / rate);
+	private void restore(RoleCombination rc, String rateKey){
+		probabilities.put(rc, probabilities.get(rc) / rates.get(rateKey));
 		updated = true;
 	}
 	

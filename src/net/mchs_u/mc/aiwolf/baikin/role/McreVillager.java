@@ -2,12 +2,21 @@ package net.mchs_u.mc.aiwolf.baikin.role;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.aiwolf.client.lib.TemplateTalkFactory;
 import org.aiwolf.common.data.Agent;
 
 public class McreVillager extends AbstractMcreRole {
 	protected Agent declareVotedTarget = null; //今日最後に投票宣言をした対象
+
+	public McreVillager() {
+		super();
+	}
+	
+	public McreVillager(Map<String,Double> estimateRates) {
+		super(estimateRates);
+	}
 	
 	@Override
 	public void dayStart() {

@@ -33,18 +33,34 @@ public abstract class AbstractMcreRole extends AbstractRole {
 	private List<EstimateGraph> estimateGraphs = null;
 	
 	private List<Double> random = null; //min,maxを選ぶ際に、同率のうちどれを優先にするかを乱数で決める。
+	
+	private Map<String,Double> estimateRates = null;
 
+	public AbstractMcreRole() {
+		super();
+	}
+	
+	public AbstractMcreRole(Map<String,Double> estimateRates) {
+		super();
+		this.estimateRates = estimateRates;
+	}
+	
 	@Override
 	public void initialize(GameInfo gameInfo, GameSetting gameSetting) {
 		super.initialize(gameInfo, gameSetting);
 		agents = gameInfo.getAgentList();
 
-		objectiveEstimate = new Estimate(agents, getMe());
+		if(estimateRates == null){
+			objectiveEstimate = new Estimate(agents, getMe());
+			subjectiveEstimate = new Estimate(agents, getMe());
+			pretendVillagerEstimate = new Estimate(agents, getMe());
+		} else {
+			objectiveEstimate = new Estimate(agents, getMe(), estimateRates);
+			subjectiveEstimate = new Estimate(agents, getMe(), estimateRates);
+			pretendVillagerEstimate = new Estimate(agents, getMe(), estimateRates);
+		}
 		
-		subjectiveEstimate = new Estimate(agents, getMe());
 		subjectiveEstimate.updateDefinedRole(getMe(), getMyRole());
-		
-		pretendVillagerEstimate = new Estimate(agents, getMe());
 		pretendVillagerEstimate.updateDefinedRole(getMe(), Role.VILLAGER);
 		
 		initDebugEstimateGraph();

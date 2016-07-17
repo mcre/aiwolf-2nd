@@ -2,6 +2,7 @@ package net.mchs_u.mc.aiwolf.baikin.role;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.aiwolf.client.lib.TemplateTalkFactory;
 import org.aiwolf.common.data.Agent;
@@ -14,6 +15,14 @@ public class McreSeer extends McreVillager {
 	private boolean co = false;
 	private boolean divinedToday = false;
 	private List<Agent> divinedList = null;
+
+	public McreSeer() {
+		super();
+	}
+	
+	public McreSeer(Map<String,Double> estimateRates) {
+		super(estimateRates);
+	}
 	
 	@Override
 	public void initialize(GameInfo gameInfo, GameSetting gameSetting) {

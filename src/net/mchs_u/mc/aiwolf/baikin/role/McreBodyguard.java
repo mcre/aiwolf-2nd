@@ -2,10 +2,19 @@ package net.mchs_u.mc.aiwolf.baikin.role;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.aiwolf.common.data.Agent;
 
 public class McreBodyguard extends McreVillager {
+
+	public McreBodyguard() {
+		super();
+	}
+	
+	public McreBodyguard(Map<String,Double> estimateRates) {
+		super(estimateRates);
+	}
 	
 	@Override
 	public Agent guard() {

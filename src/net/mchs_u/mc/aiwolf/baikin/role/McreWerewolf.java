@@ -15,6 +15,14 @@ import org.aiwolf.common.net.GameSetting;
 public class McreWerewolf extends AbstractMcreRole {
 	private Agent declaredVoteTarget = null; //今日最後に投票宣言をした対象
 	private Agent declaredAttackTarget = null; //今日最後に襲撃宣言をした対象
+
+	public McreWerewolf() {
+		super();
+	}
+	
+	public McreWerewolf(Map<String,Double> estimateRates) {
+		super(estimateRates);
+	}
 	
 	@Override
 	public void initialize(GameInfo gameInfo, GameSetting gameSetting) {
