@@ -33,7 +33,8 @@ import org.aiwolf.ui.util.AgentLibraryReader;
  */
 @SuppressWarnings("deprecation")
 public class DirectStarter {
-	public static final boolean IS_VISUALIZE = false; // TODO 大会時はFALSE
+	public static final boolean IS_VISUALIZE  = false; // TODO 大会時はFALSE
+	public static final boolean IS_MONTECARLO = true; // TODO 大会時はFALSE
 	
 	private static final String LOG_DIR = "./log/";
 	private static final String RESULT_DIR = "./result/";
@@ -52,12 +53,12 @@ public class DirectStarter {
 	private Map<String,Double> myAgentEstimateRates = null;
 	
 	public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-		int set = 50;
+		int set = 1;
 		int times = 100;
 		boolean isVisualize = IS_VISUALIZE;
 		boolean isLog = false;
 		boolean isSaveResult = true;
-		boolean isMontecarlo = true;
+		boolean isMontecarlo = IS_MONTECARLO;
 		
 		List<Pair<String, Role>> players = new ArrayList<>();
 		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.anpan.McreRoleAssignPlayer", null));
@@ -195,11 +196,14 @@ public class DirectStarter {
 		StringBuffer s = new StringBuffer();
 		
 		s.append("set : " + set + "\n");
+		/*
 		if(myAgentEstimateRates != null){
 			for(String key: myAgentEstimateRates.keySet()){
 				s.append("*\t" + key + "\t" + myAgentEstimateRates.get(key) + "\n");
 			}
+			s.append("\n");
 		}
+		*/
 		s.append("       ");
 		
 		for(Role role:Role.values()){

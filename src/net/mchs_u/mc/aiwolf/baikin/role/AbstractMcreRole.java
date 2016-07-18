@@ -1,7 +1,11 @@
 package net.mchs_u.mc.aiwolf.baikin.role;
 
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -22,6 +26,10 @@ import net.mchs_u.mc.aiwolf.starter.DirectStarter;
 public abstract class AbstractMcreRole extends AbstractRole {
 	private static final boolean DEBUG_ESTIMATE_GRAPH = DirectStarter.IS_VISUALIZE;
 	private static final boolean DEBUG_ESTIMATE_PRINT = false;
+	private static final boolean SAVE_MONTECARLO = DirectStarter.IS_MONTECARLO;
+	private static final String MONTECARLO_DIR = "./montecarlo/";
+	private static final String MONTECARLO_PREFIX = "003_";
+	private StringBuffer montecarloOutput = null;
 	
 	protected List<Agent> agents = null;
 	protected int readTalkNum = 0;
@@ -70,6 +78,14 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		for(int i = 0; i < 15; i++){
 			random.add(Math.random() / 100000d);
 		}
+		
+		if(SAVE_MONTECARLO){
+			montecarloOutput = new StringBuffer("");
+			for(String key: estimateRates.keySet())
+				montecarloOutput.append("RATES\t" + key + "\t" + estimateRates.get(key) + "\n");
+		}
+		
+		
 	}	
 	
 	@Override
@@ -90,6 +106,33 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		pretendVillagerEstimate.updateAttackedAgent(info.getAttackedAgent());
 		pretendVillagerEstimate.updateVoteList(info.getVoteList());
 		debugEstimateRefresh();
+		
+		if(SAVE_MONTECARLO){
+			montecarloOutput.append(monteLoop());
+		}
+	}
+	
+	private String monteLoop(){
+		GameInfo info = getLatestDayGameInfo();
+		
+		StringBuffer s = new StringBuffer("");
+		s.append("MYSELF\t" + info.getDay() +"\t" + getMe().getAgentIdx() + "\t" + (info.getAliveAgentList().contains(getMe()) ? "ALIVE":"DEAD" ) + "\n");
+		
+		Map<Agent,Double> ov = objectiveEstimate.getVillagerTeamLikeness();
+		Map<Agent,Double> ow = objectiveEstimate.getWerewolfLikeness();
+		Map<Agent,Double> sv = subjectiveEstimate.getVillagerTeamLikeness();
+		Map<Agent,Double> sw = subjectiveEstimate.getWerewolfLikeness();
+		Map<Agent,Double> pv = pretendVillagerEstimate.getVillagerTeamLikeness();
+		Map<Agent,Double> pw = pretendVillagerEstimate.getWerewolfLikeness();
+		
+		for(Agent a: agents)
+			s.append("OBJ_VPW\t"+ info.getDay() +"\t" + a.getAgentIdx() + "\t" + (info.getAliveAgentList().contains(a) ? "ALIVE":"DEAD" ) + "\t" + ov.get(a) + "\t" + (1d - ov.get(a) - ow.get(a))  + "\t" + ow.get(a) + "\n");
+		for(Agent a: agents)
+			s.append("SBJ_VPW\t"+ info.getDay() +"\t" + a.getAgentIdx() + "\t" + (info.getAliveAgentList().contains(a) ? "ALIVE":"DEAD" ) + "\t" + sv.get(a) + "\t" + (1d - sv.get(a) - sw.get(a))  + "\t" + sw.get(a) + "\n");
+		for(Agent a: agents)
+			s.append("PRV_VPW\t"+ info.getDay() +"\t" + a.getAgentIdx() + "\t" + (info.getAliveAgentList().contains(a) ? "ALIVE":"DEAD" ) + "\t" + pv.get(a) + "\t" + (1d - pv.get(a) - pw.get(a))  + "\t" + pw.get(a) + "\n");
+		
+		return s.toString();
 	}
 	
 	@Override
@@ -132,6 +175,29 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		debugEstimateRefresh();
 		if(DEBUG_ESTIMATE_GRAPH){
 			frame.dispose();
+		}
+		if(SAVE_MONTECARLO){
+			GameInfo info = getLatestDayGameInfo();
+			montecarloOutput.append(monteLoop());
+			for(Agent a: agents)
+				montecarloOutput.append("CORRECT\t" + getDay() + "\t" + a.getAgentIdx() + "\t" + (info.getAliveAgentList().contains(a) ? "ALIVE":"DEAD" ) + "\t" + info.getRoleMap().get(a).toString() + "\n");
+			boolean winVil = true;
+			for(Agent a: info.getAliveAgentList()){
+				if(info.getRoleMap().get(a) == Role.WEREWOLF){
+					winVil = false;
+					break;
+				}
+			}
+			if(winVil)
+				montecarloOutput.append("WINNER\tVILLAGER_TEAM\n");
+			else
+				montecarloOutput.append("WINNER\tWEREWOLF_TEAM\n");
+			
+			try(FileWriter fw = new FileWriter(new File(MONTECARLO_DIR + MONTECARLO_PREFIX + (new Date()).getTime() + ".txt"))){
+				fw.write(montecarloOutput.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
