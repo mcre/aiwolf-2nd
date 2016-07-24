@@ -12,27 +12,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.aiwolf.common.data.Role;
+import org.aiwolf.common.data.Team;
 
-//メモリ消費しまくるので必須なもの以外は一旦コメントアウトした
 public class MontecarloData {
 	private static final double EPS = 0.000000000000001d;
 	
 	private String hashKey = null;
-	//private Team winner = null;
+	private Team winner = null;
 	private Map<String, Role> correctRoles = null;
 	private Map<String, Double> rates = null;
-	//private String me = null;
+	private String me = null;
 	private int maxDay = 0;
 	private Map<Integer, Map<String ,Map<String, Double>>> objectiveEstimate = null; //day, vpw, id, rate
-	//private Map<Integer, Map<String ,Map<String, Double>>> subjectiveEstimate = null;
-	//private Map<Integer, Map<String ,Map<String, Double>>> pretendVillagerEstimate = null;
+	private Map<Integer, Map<String ,Map<String, Double>>> subjectiveEstimate = null;
+	private Map<Integer, Map<String ,Map<String, Double>>> pretendVillagerEstimate = null;
 
 	public MontecarloData(File file) throws FileNotFoundException, IOException {
 		rates = new HashMap<>(15);
 		correctRoles = new HashMap<>(15);
 		objectiveEstimate = new HashMap<>(8);
-		//subjectiveEstimate = new HashMap<>();
-		//pretendVillagerEstimate = new HashMap<>();
+		subjectiveEstimate = new HashMap<>(8);
+		pretendVillagerEstimate = new HashMap<>(8);
 		StringBuffer buffer = new StringBuffer("");
 		
 		try(BufferedReader br = new BufferedReader(new FileReader(file))){
@@ -41,38 +41,36 @@ public class MontecarloData {
 				String[] c = line.split("\t");
 				
 				if(c[0].equals("MYSELF") && c[1].equals("0")) {
-					//me = c[2];
+					me = c[2];
 				} else if(c[0].equals("RATES")) {
 					rates.put(c[1], Double.parseDouble(c[2]));
 					buffer.append(c[1] + "," + c[2] + ",");
 				} else if(c[0].equals("WINNER")) {
-					/*
 					if (c[1].equals("WEREWOLF_TEAM"))
 						winner = Team.WEREWOLF;
 					else
 						winner = Team.VILLAGER;
-					*/
 				} else if(c[0].equals("CORRECT")) {
 					correctRoles.put(c[2], Role.valueOf(c[4]));
 					maxDay = Integer.parseInt(c[1]);
 				} else if(c[0].equals("OBJ_VPW")) {
 					int day = Integer.parseInt(c[1]);
 					if(!objectiveEstimate.containsKey(day)){
-						objectiveEstimate.put(day, new HashMap<String ,Map<String, Double>>(2));
-						//objectiveEstimate.get(day).put("VILLAGER_TEAM", new HashMap<String, Double>(8));
+						objectiveEstimate.put(day, new HashMap<String ,Map<String, Double>>(3));
+						objectiveEstimate.get(day).put("VILLAGER_TEAM", new HashMap<String, Double>(15));
 						objectiveEstimate.get(day).put("POSSESSED", new HashMap<String, Double>(15));
 						objectiveEstimate.get(day).put("WEREWOLF", new HashMap<String, Double>(15));
 					}
-					//objectiveEstimate.get(day).get("VILLAGER_TEAM").put(c[2], Double.parseDouble(c[4]));
+					objectiveEstimate.get(day).get("VILLAGER_TEAM").put(c[2], Double.parseDouble(c[4]));
 					objectiveEstimate.get(day).get("POSSESSED").put(c[2], Double.parseDouble(c[5]));
 					objectiveEstimate.get(day).get("WEREWOLF").put(c[2], Double.parseDouble(c[6]));
-				/*} else if(c[0].equals("SBJ_VPW")) {
+				} else if(c[0].equals("SBJ_VPW")) {
 					int day = Integer.parseInt(c[1]);
 					if(!subjectiveEstimate.containsKey(day)){
-						subjectiveEstimate.put(day, new HashMap<String ,Map<String, Double>>());
-						subjectiveEstimate.get(day).put("VILLAGER_TEAM", new HashMap<String, Double>());
-						subjectiveEstimate.get(day).put("POSSESSED", new HashMap<String, Double>());
-						subjectiveEstimate.get(day).put("WEREWOLF", new HashMap<String, Double>());
+						subjectiveEstimate.put(day, new HashMap<String ,Map<String, Double>>(3));
+						subjectiveEstimate.get(day).put("VILLAGER_TEAM", new HashMap<String, Double>(15));
+						subjectiveEstimate.get(day).put("POSSESSED", new HashMap<String, Double>(15));
+						subjectiveEstimate.get(day).put("WEREWOLF", new HashMap<String, Double>(15));
 					}
 
 					subjectiveEstimate.get(day).get("VILLAGER_TEAM").put(c[2], Double.parseDouble(c[4]));
@@ -81,15 +79,15 @@ public class MontecarloData {
 				} else if(c[0].equals("PRV_VPW")) {
 					int day = Integer.parseInt(c[1]);
 					if(!pretendVillagerEstimate.containsKey(day)){
-						pretendVillagerEstimate.put(day, new HashMap<String ,Map<String, Double>>());
-						pretendVillagerEstimate.get(day).put("VILLAGER_TEAM", new HashMap<String, Double>());
-						pretendVillagerEstimate.get(day).put("POSSESSED", new HashMap<String, Double>());
-						pretendVillagerEstimate.get(day).put("WEREWOLF", new HashMap<String, Double>());
+						pretendVillagerEstimate.put(day, new HashMap<String ,Map<String, Double>>(3));
+						pretendVillagerEstimate.get(day).put("VILLAGER_TEAM", new HashMap<String, Double>(15));
+						pretendVillagerEstimate.get(day).put("POSSESSED", new HashMap<String, Double>(15));
+						pretendVillagerEstimate.get(day).put("WEREWOLF", new HashMap<String, Double>(15));
 					}
 					pretendVillagerEstimate.get(day).get("VILLAGER_TEAM").put(c[2], Double.parseDouble(c[4]));
 					pretendVillagerEstimate.get(day).get("POSSESSED").put(c[2], Double.parseDouble(c[5]));
 					pretendVillagerEstimate.get(day).get("WEREWOLF").put(c[2], Double.parseDouble(c[6]));
-				*/}
+				}
 			}
 		}
 		hashKey = buffer.toString();
@@ -100,7 +98,7 @@ public class MontecarloData {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((ratesHashKey == null) ? 0 : ratesHashKey.hashCode());
+		result = prime * result + ((hashKey == null) ? 0 : hashKey.hashCode());
 		return result;
 	}
 
@@ -116,14 +114,14 @@ public class MontecarloData {
 		if (ratesHashKey == null) {
 			if (other.ratesHashKey != null)
 				return false;
-		} else if (!ratesHashKey.equals(other.ratesHashKey))
+		} else if (!hashKey.equals(other.hashKey))
 			return false;
 		return true;
-	}
+	}*/
 
 	public Team getWinner() {
 		return winner;
-	}*/
+	}
 
 	public Map<String, Role> getCorrectRoles() {
 		return correctRoles;
@@ -133,11 +131,9 @@ public class MontecarloData {
 		return rates;
 	}
 
-	/*
 	public String getMe() {
 		return me;
 	}
-	*/
 	
 	public int getMaxDay() {
 		return maxDay;
@@ -147,7 +143,6 @@ public class MontecarloData {
 		return objectiveEstimate;
 	}
 
-	/*
 	public Map<Integer, Map<String, Map<String, Double>>> getSubjectiveEstimate() {
 		return subjectiveEstimate;
 	}
@@ -155,7 +150,6 @@ public class MontecarloData {
 	public Map<Integer, Map<String, Map<String, Double>>> getPretendVillagerEstimate() {
 		return pretendVillagerEstimate;
 	}
-	*/
 	
 	//雑
 	public double getScore(int day){
