@@ -32,6 +32,7 @@ public class Estimate {
 
 	private static Map<String,Double> getDefaultRates(){
 		Map<String,Double> rates = new HashMap<>();
+		/* cashさん
 		rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
 		rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
 		rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
@@ -47,6 +48,62 @@ public class Estimate {
 		rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
 		rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
 		rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+		*/
+		
+		//montecarloでいちばん結果が良かったやつ
+		/*
+		rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.8261087445d);
+		rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.8034845955d);
+		rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.4152682159d);
+		rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.6336522049d);
+		rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.5858505261d);
+		rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.7653259964d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.0637940393d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.2866252217d);
+		rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.7247348568d);
+		rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.8397028874d);
+		rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.9047568048d);
+		rates.put("NEVER_CO_FROM_POSSESSED"            , 0.4319854272d);
+		rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.8753930959d);
+		rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.0709898571d);
+		rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+		*/
+		
+		//montecarloの結果をAzure機械学習につっこんでいちばんスコアが高くなるもの・・・
+		rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 1d);
+		rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 1d);
+		rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 1d);
+		rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0d);
+		rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0d);
+		rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0d);
+		rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0d);
+		rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0d);
+		rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0d);
+		rates.put("NEVER_CO_FROM_POSSESSED"            , 1d);
+		rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 1d);
+		rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0d);
+		rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+
+		/* cashさん
+		rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
+		rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
+		rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
+		rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
+		rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
+		rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
+		rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
+		rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
+		rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
+		rates.put("NEVER_CO_FROM_POSSESSED"            , 0.100d);
+		rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
+		rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
+		rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+		*/
+		
 		return rates;
 	}
 	

@@ -53,7 +53,7 @@ public class DirectStarter {
 	private Map<String,Double> myAgentEstimateRates = null;
 	
 	public static void main(String[] args) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-		int set = 1;
+		int set = 600;
 		int times = 100;
 		boolean isVisualize = IS_VISUALIZE;
 		boolean isLog = false;
@@ -79,29 +79,49 @@ public class DirectStarter {
 		//players.add(new Pair<String, Role>("com.gmail.the.seventh.layers.RoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("tkAI.tkAIPlayer", null));
 		
-		Map<String,Double> rates = null;
-		while(true){
-			if(isMontecarlo){
+		if(isMontecarlo){
+			while(true){
+				Map<String,Double> rates = new HashMap<>();
 				rates = new HashMap<>();
-				rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , Math.random());
-				rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , Math.random());
-				rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , Math.random());
-				rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , Math.random());
-				rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , Math.random());
-				rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", Math.random());
-				rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", Math.random());
-				rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , Math.random());
-				rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , Math.random());
-				rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , Math.random());
-				rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , Math.random());
-				rates.put("NEVER_CO_FROM_POSSESSED"            , Math.random());
-				rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , Math.random());
-				rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , Math.random());
-				rates.put("TEAM_MEMBER_WOLF"                   , Math.random());
+				rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , get5Patterns());
+				rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , get5Patterns());
+				rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , get5Patterns());
+				rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , get5Patterns());
+				rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , get5Patterns());
+				rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", get5Patterns());
+				rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", get5Patterns());
+				rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , get5Patterns());
+				rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , get5Patterns());
+				rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , get5Patterns());
+				rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , get5Patterns());
+				rates.put("NEVER_CO_FROM_POSSESSED"            , get5Patterns());
+				rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , get5Patterns());
+				rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , get5Patterns());
+				rates.put("TEAM_MEMBER_WOLF"                   , get5Patterns());
+				DirectStarter ds = new DirectStarter(players, times, 1, isVisualize, isLog, isSaveResult, rates);
+				ds.start();
 			}
-			DirectStarter ds = new DirectStarter(players, times, set, isVisualize, isLog, isSaveResult, rates);
+		} else {
+			DirectStarter ds = new DirectStarter(players, times, set, isVisualize, isLog, isSaveResult, null);
 			ds.start();
 		}
+	}
+	
+	private static double get5Patterns(){
+		int n = (int)(Math.random() * 5);
+		switch (n) {
+		case 0:
+			return 0.00d;
+		case 1:
+			return 0.25d;
+		case 2:
+			return 0.50d;
+		case 3:
+			return 0.75d;
+		case 4:
+			return 1.00d;
+		}
+		return 1.00d;
 	}
 	
 	@SuppressWarnings("rawtypes")
