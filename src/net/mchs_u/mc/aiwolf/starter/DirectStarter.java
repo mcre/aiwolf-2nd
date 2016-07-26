@@ -34,7 +34,7 @@ import org.aiwolf.ui.util.AgentLibraryReader;
 @SuppressWarnings("deprecation")
 public class DirectStarter {
 	public static final boolean IS_VISUALIZE  = false; // TODO 大会時はFALSE
-	public static final boolean IS_MONTECARLO = true; // TODO 大会時はFALSE
+	public static final boolean IS_RATE_ADJUST_MODE = true; // TODO 大会時はFALSE
 	
 	private static final String LOG_DIR = "./log/";
 	private static final String RESULT_DIR = "./result/";
@@ -58,7 +58,7 @@ public class DirectStarter {
 		boolean isVisualize = IS_VISUALIZE;
 		boolean isLog = false;
 		boolean isSaveResult = true;
-		boolean isMontecarlo = IS_MONTECARLO;
+		boolean isRateAdjust = IS_RATE_ADJUST_MODE;
 		
 		List<Pair<String, Role>> players = new ArrayList<>();
 		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.anpan.McreRoleAssignPlayer", null));
@@ -79,49 +79,53 @@ public class DirectStarter {
 		//players.add(new Pair<String, Role>("com.gmail.the.seventh.layers.RoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("tkAI.tkAIPlayer", null));
 		
-		if(isMontecarlo){
-			while(true){
-				Map<String,Double> rates = new HashMap<>();
-				rates = new HashMap<>();
-				rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , get5Patterns());
-				rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , get5Patterns());
-				rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , get5Patterns());
-				rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , get5Patterns());
-				rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , get5Patterns());
-				rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", get5Patterns());
-				rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", get5Patterns());
-				rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , get5Patterns());
-				rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , get5Patterns());
-				rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , get5Patterns());
-				rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , get5Patterns());
-				rates.put("NEVER_CO_FROM_POSSESSED"            , get5Patterns());
-				rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , get5Patterns());
-				rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , get5Patterns());
-				rates.put("TEAM_MEMBER_WOLF"                   , get5Patterns());
-				DirectStarter ds = new DirectStarter(players, times, 1, isVisualize, isLog, isSaveResult, rates);
-				ds.start();
-			}
+		DirectStarter ds = null;
+		
+		if(isRateAdjust){
+			Map<String,Double> rates = new HashMap<>();
+			
+			rates = new HashMap<>();
+			rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
+			rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
+			rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
+			rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
+			rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
+			rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
+			rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
+			rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
+			rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
+			rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
+			rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
+			rates.put("NEVER_CO_FROM_POSSESSED"            , 0.100d);
+			rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
+			rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
+			rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+			ds = new DirectStarter(players, 100, 10, false, false, isSaveResult, rates);
+			ds.start();
+			
+			rates = new HashMap<>();
+			rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
+			rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
+			rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
+			rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
+			rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
+			rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
+			rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
+			rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
+			rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
+			rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
+			rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
+			rates.put("NEVER_CO_FROM_POSSESSED"            , 1.000d);
+			rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
+			rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
+			rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+			ds = new DirectStarter(players, 100, 10, false, false, isSaveResult, rates);
+			ds.start();
+			
 		} else {
-			DirectStarter ds = new DirectStarter(players, times, set, isVisualize, isLog, isSaveResult, null);
+			ds = new DirectStarter(players, times, set, isVisualize, isLog, isSaveResult, null);
 			ds.start();
 		}
-	}
-	
-	private static double get5Patterns(){
-		int n = (int)(Math.random() * 5);
-		switch (n) {
-		case 0:
-			return 0.00d;
-		case 1:
-			return 0.25d;
-		case 2:
-			return 0.50d;
-		case 3:
-			return 0.75d;
-		case 4:
-			return 1.00d;
-		}
-		return 1.00d;
 	}
 	
 	@SuppressWarnings("rawtypes")
