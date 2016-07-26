@@ -14,7 +14,7 @@ import java.util.Map;
 import org.aiwolf.common.data.Role;
 import org.aiwolf.common.data.Team;
 
-public class MontecarloData {
+public class RateAdjustData {
 	private static final double EPS = 0.000000000000001d;
 	
 	private String hashKey = null;
@@ -27,7 +27,7 @@ public class MontecarloData {
 	private Map<Integer, Map<String ,Map<String, Double>>> subjectiveEstimate = null;
 	private Map<Integer, Map<String ,Map<String, Double>>> pretendVillagerEstimate = null;
 
-	public MontecarloData(File file) throws FileNotFoundException, IOException {
+	public RateAdjustData(File file) throws FileNotFoundException, IOException {
 		rates = new HashMap<>(15);
 		correctRoles = new HashMap<>(15);
 		objectiveEstimate = new HashMap<>(8);
@@ -235,7 +235,7 @@ public class MontecarloData {
 	
 	//テスト用
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		MontecarloData md = new MontecarloData(new File("montecarlo/003_1468858300499.txt")); 
+		RateAdjustData md = new RateAdjustData(new File("montecarlo/003_1468858300499.txt")); 
 		//MontecarloData md = new MontecarloData("tmp.txt"); 
 		System.out.println(md.getScore(0));
 	}

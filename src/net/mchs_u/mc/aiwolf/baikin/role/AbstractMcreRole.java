@@ -26,9 +26,9 @@ import net.mchs_u.mc.aiwolf.starter.DirectStarter;
 public abstract class AbstractMcreRole extends AbstractRole {
 	private static final boolean DEBUG_ESTIMATE_GRAPH = DirectStarter.IS_VISUALIZE;
 	private static final boolean DEBUG_ESTIMATE_PRINT = false;
-	private static final boolean SAVE_MONTECARLO = DirectStarter.IS_MONTECARLO;
-	private static final String MONTECARLO_DIR = "./montecarlo/";
-	private static final String MONTECARLO_PREFIX = "003_";
+	private static final boolean IS_SAVE_RATE_ADJUST = DirectStarter.IS_RATE_ADJUST_MODE;
+	private static final String RATE_ADJUST_DIR = "./rate_adjust/";
+	private static final String RATE_ADJUST_PREFIX = "003_";
 	private StringBuffer montecarloOutput = null;
 	
 	protected List<Agent> agents = null;
@@ -79,7 +79,7 @@ public abstract class AbstractMcreRole extends AbstractRole {
 			random.add(Math.random() / 100000d);
 		}
 		
-		if(SAVE_MONTECARLO){
+		if(IS_SAVE_RATE_ADJUST){
 			montecarloOutput = new StringBuffer("");
 			for(String key: estimateRates.keySet())
 				montecarloOutput.append("RATES\t" + key + "\t" + estimateRates.get(key) + "\n");
@@ -107,7 +107,7 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		pretendVillagerEstimate.updateVoteList(info.getVoteList());
 		debugEstimateRefresh();
 		
-		if(SAVE_MONTECARLO){
+		if(IS_SAVE_RATE_ADJUST){
 			montecarloOutput.append(monteLoop());
 		}
 	}
@@ -176,7 +176,7 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		if(DEBUG_ESTIMATE_GRAPH){
 			frame.dispose();
 		}
-		if(SAVE_MONTECARLO){
+		if(IS_SAVE_RATE_ADJUST){
 			GameInfo info = getLatestDayGameInfo();
 			montecarloOutput.append(monteLoop());
 			for(Agent a: agents)
@@ -193,7 +193,7 @@ public abstract class AbstractMcreRole extends AbstractRole {
 			else
 				montecarloOutput.append("WINNER\tWEREWOLF_TEAM\n");
 			
-			try(FileWriter fw = new FileWriter(new File(MONTECARLO_DIR + MONTECARLO_PREFIX + (new Date()).getTime() + ".txt"))){
+			try(FileWriter fw = new FileWriter(new File(RATE_ADJUST_DIR + RATE_ADJUST_PREFIX + (new Date()).getTime() + ".txt"))){
 				fw.write(montecarloOutput.toString());
 			} catch (IOException e) {
 				e.printStackTrace();

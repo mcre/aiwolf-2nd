@@ -7,25 +7,25 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MontecarloSumup {
-	private static final String MONTECARLO_DIR = "./montecarlo/";
-	private static final String MONTECARLO_PREFIX = "003_";
+public class RateAdjustSumup {
+	private static final String RATE_ADJUST_DIR = "./rate_adjust/";
+	private static final String RATE_ADJUST_PREFIX = "004_";
 
 	private Map<Integer, Map<String, Double>>  scoreSums = null;
 	private Map<String, Integer> counts = null;
 	
 	
-	public MontecarloSumup() throws FileNotFoundException, IOException {
+	public RateAdjustSumup() throws FileNotFoundException, IOException {
 		scoreSums = new HashMap<>();
 		counts    = new HashMap<>();
-		File dir = new File(MONTECARLO_DIR);
+		File dir = new File(RATE_ADJUST_DIR);
 		File[] files = dir.listFiles(new FilenameFilter(){
 			public boolean accept(File dir, String name){
-				return name.startsWith(MONTECARLO_PREFIX);
+				return name.startsWith(RATE_ADJUST_PREFIX);
 			}
 		});
 		for(File f: files){
-			MontecarloData md = new MontecarloData(f);
+			RateAdjustData md = new RateAdjustData(f);
 			String key = md.getHashKey();
 			for(int i = 0; i < 15; i++){
 				if(!scoreSums.containsKey(i))
@@ -49,7 +49,7 @@ public class MontecarloSumup {
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		MontecarloSumup ms = new MontecarloSumup();
+		RateAdjustSumup ms = new RateAdjustSumup();
 		for(int i = 0; i < 15; i++){
 			Map<String, Double> scoreSums = ms.getScoreSums(i);
 			Map<String, Integer> counts = ms.getCounts();
