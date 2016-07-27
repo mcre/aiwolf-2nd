@@ -44,7 +44,7 @@ public class RateAdjustData {
 					me = c[2];
 				} else if(c[0].equals("RATES")) {
 					rates.put(c[1], Double.parseDouble(c[2]));
-					buffer.append(c[1] + "," + c[2] + ",");
+					buffer.append(c[1] + "," + String.format("%7.5f",Double.parseDouble(c[2])) + ",");
 				} else if(c[0].equals("WINNER")) {
 					if (c[1].equals("WEREWOLF_TEAM"))
 						winner = Team.WEREWOLF;
