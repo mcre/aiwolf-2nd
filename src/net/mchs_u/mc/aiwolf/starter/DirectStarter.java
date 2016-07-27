@@ -82,48 +82,52 @@ public class DirectStarter {
 		DirectStarter ds = null;
 		
 		if(isRateAdjust){
-			Map<String,Double> rates = new HashMap<>();
+			Map<String, Double> ratesBackup = new HashMap<>();
 			
-			rates = new HashMap<>();
-			rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
-			rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
-			rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
-			rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
-			rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
-			rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
-			rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
-			rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
-			rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
-			rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
-			rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
-			rates.put("NEVER_CO_FROM_POSSESSED"            , 0.100d);
-			rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
-			rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
-			rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
-			ds = new DirectStarter(players, 100, 10, false, false, isSaveResult, rates);
-			ds.start();
+			ratesBackup = new HashMap<>();
+			ratesBackup.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
+			ratesBackup.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
+			ratesBackup.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
+			ratesBackup.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
+			ratesBackup.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
+			ratesBackup.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
+			ratesBackup.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
+			ratesBackup.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
+			ratesBackup.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
+			ratesBackup.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
+			ratesBackup.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
+			ratesBackup.put("NEVER_CO_FROM_POSSESSED"            , 0.100d);
+			ratesBackup.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
+			ratesBackup.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
+			ratesBackup.put("TEAM_MEMBER_WOLF"                   , 0.500d);
 			
-			rates = new HashMap<>();
-			rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
-			rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
-			rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
-			rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
-			rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
-			rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
-			rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
-			rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
-			rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
-			rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
-			rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
-			rates.put("NEVER_CO_FROM_POSSESSED"            , 1.000d);
-			rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
-			rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
-			rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
-			ds = new DirectStarter(players, 100, 10, false, false, isSaveResult, rates);
-			ds.start();
-			
+			while(true){
+				rateAdjust(players, ratesBackup, "VOTE_POSSESSED_TO_WEREWOLF"         );
+				rateAdjust(players, ratesBackup, "VOTE_WEREWOLF_TO_POSSESSED"         );
+				rateAdjust(players, ratesBackup, "VOTE_WEREWOLF_TO_WEREWOLF"          );
+				rateAdjust(players, ratesBackup, "FALSE_INQUESTED_FROM_VILLAGER_TEAM" );
+				rateAdjust(players, ratesBackup, "FALSE_DIVINED_FROM_VILLAGER_TEAM"   );
+				rateAdjust(players, ratesBackup, "BLACK_DIVINED_POSSESSED_TO_WEREWOLF");
+				rateAdjust(players, ratesBackup, "BLACK_DIVINED_WEREWOLF_TO_POSSESSED");
+				rateAdjust(players, ratesBackup, "BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" );
+				rateAdjust(players, ratesBackup, "2_SEER_CO_FROM_VILLGER_TEAM"        );
+				rateAdjust(players, ratesBackup, "2_MEDIUM_CO_FROM_VILLAGER_TEAM"     );
+				rateAdjust(players, ratesBackup, "2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  );
+				rateAdjust(players, ratesBackup, "NEVER_CO_FROM_POSSESSED"            );
+				rateAdjust(players, ratesBackup, "ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    );
+				rateAdjust(players, ratesBackup, "ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  );
+			}
 		} else {
 			ds = new DirectStarter(players, times, set, isVisualize, isLog, isSaveResult, null);
+			ds.start();
+		}
+	}
+	
+	private static void rateAdjust(final List<Pair<String, Role>> players, final Map<String,Double> ratesBackup, final String key) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException{
+		for(double x = 0d; x <= 1d; x += 0.1d){
+			Map<String,Double> rates = new HashMap<String, Double>(ratesBackup);
+			rates.put(key, x);
+			DirectStarter ds = new DirectStarter(players, 100, 1, false, false, true, rates);
 			ds.start();
 		}
 	}

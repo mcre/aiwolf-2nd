@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RateAdjustSumup {
 	private static final String RATE_ADJUST_DIR = "./rate_adjust/";
-	private static final String RATE_ADJUST_PREFIX = "004_";
+	private static final String RATE_ADJUST_PREFIX = "005_";
 
 	private Map<Integer, Map<String, Double>>  scoreSums = null;
 	private Map<String, Integer> counts = null;
@@ -24,9 +24,12 @@ public class RateAdjustSumup {
 				return name.startsWith(RATE_ADJUST_PREFIX);
 			}
 		});
+		
+		Map<String, Integer> keys = new HashMap<>(); 
 		for(File f: files){
 			RateAdjustData md = new RateAdjustData(f);
 			String key = md.getHashKey();
+			keys.put(key, key.hashCode());
 			for(int i = 0; i < 15; i++){
 				if(!scoreSums.containsKey(i))
 					scoreSums.put(i, new HashMap<String, Double>());
@@ -34,9 +37,15 @@ public class RateAdjustSumup {
 					scoreSums.get(i).put(key, 0d);
 					counts.put(key, 0);
 				}
-				scoreSums.get(i).put(key, scoreSums.get(i).get(key) + md.getScore(i));	
+				scoreSums.get(i).put(key, scoreSums.get(i).get(key) + md.getScore(i));
 			}
 			counts.put(key, counts.get(key) + 1);
+			
+			//何回くらいで収束するか確認
+			System.out.println(key.hashCode() + "," + counts.get(key) + "," + (scoreSums.get(14).get(key) / (double)counts.get(key)));
+		}
+		for(String k: keys.keySet()){
+			System.out.println("☆" + k + "|" + keys.get(k));
 		}
 	}
 	
