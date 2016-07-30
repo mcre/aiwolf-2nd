@@ -18,7 +18,7 @@ public class RateAdjustSumup {
 	private Map<String, Integer> counts = null;
 	
 	
-	public RateAdjustSumup() throws FileNotFoundException, IOException {
+	public RateAdjustSumup(int max) throws FileNotFoundException, IOException {
 		scoreSums = new HashMap<>();
 		counts    = new HashMap<>();
 		File dir = new File(RATE_ADJUST_DIR);
@@ -28,11 +28,13 @@ public class RateAdjustSumup {
 			}
 		});
 		
-		Map<String, Integer> keys = new HashMap<>(); 
+		//Map<String, Integer> keys = new HashMap<>(); 
 		for(File f: files){
 			RateAdjustData md = new RateAdjustData(f);
 			String key = md.getHashKey();
-			keys.put(key, key.hashCode());
+			if(counts.containsKey(key) && counts.get(key) >= max)
+				continue;
+			//keys.put(key, key.hashCode());
 			for(int i = 0; i < 15; i++){
 				if(!scoreSums.containsKey(i))
 					scoreSums.put(i, new HashMap<String, Double>());
@@ -62,7 +64,11 @@ public class RateAdjustSumup {
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		RateAdjustSumup ms = new RateAdjustSumup();
+		int max = 1000;
+		if(args.length >= 1)
+			max = Integer.parseInt(args[0]);
+		
+		RateAdjustSumup ms = new RateAdjustSumup(max);
 		for(int i = 14; i < 15; i++){ //もう14日目だけで十分
 			Map<String, Double> scoreSums = ms.getScoreSums(i);
 			Map<String, Integer> counts = ms.getCounts();

@@ -33,6 +33,7 @@ public class Estimate {
 	private static Map<String,Double> getDefaultRates(){
 		Map<String,Double> rates = new HashMap<>();
 
+		/* cashさん
 		rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
 		rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
 		rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
@@ -45,6 +46,24 @@ public class Estimate {
 		rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
 		rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
 		rates.put("NEVER_CO_FROM_POSSESSED"            , 0.100d);
+		rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
+		rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
+		rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+		*/
+		
+		//rateAdjust結果
+		rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
+		rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
+		rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.200d);
+		rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
+		rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.000d);
+		rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.600d);
+		rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.500d);
+		rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
+		rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
+		rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.200d);
+		rates.put("NEVER_CO_FROM_POSSESSED"            , 1.000d);
 		rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
 		rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
 		rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);

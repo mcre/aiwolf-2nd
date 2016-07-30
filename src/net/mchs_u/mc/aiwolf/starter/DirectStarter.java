@@ -34,7 +34,11 @@ import org.aiwolf.ui.util.AgentLibraryReader;
 @SuppressWarnings("deprecation")
 public class DirectStarter {
 	public static final boolean IS_VISUALIZE  = false; // TODO 大会時はFALSE
-	public static final boolean IS_RATE_ADJUST_MODE = true; // TODO 大会時はFALSE
+	public static final boolean IS_RATE_ADJUST_MODE = false; // TODO 大会時はFALSE
+
+	//public static final Role ROLE = Role.SEER;
+	public static final Role ROLE = null;
+	public static final boolean IS_RATE_ADJUST_LOOP = false;
 	
 	private static final String LOG_DIR = "./log/";
 	private static final String RESULT_DIR = "./result/";
@@ -58,12 +62,10 @@ public class DirectStarter {
 		boolean isVisualize = IS_VISUALIZE;
 		boolean isLog = false;
 		boolean isSaveResult = true;
-		boolean isRateAdjust = IS_RATE_ADJUST_MODE;
 		
 		List<Pair<String, Role>> players = new ArrayList<>();
 		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.anpan.McreRoleAssignPlayer", null));
-		//players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", Role.SEER));
-		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", null));
+		players.add(new Pair<String, Role>("net.mchs_u.mc.aiwolf.baikin.McreRoleAssignPlayer", ROLE));
 		players.add(new Pair<String, Role>("org.aiwolf.kajiClient.player.KajiRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("jp.ac.tohoku.ecei.shino.takaaki_okawa.agent.KatakanaRoleAssignPlayer", null));
 		players.add(new Pair<String, Role>("com.si.maekawa.MaekawaRoleAssignPlayer", null));
@@ -81,42 +83,63 @@ public class DirectStarter {
 		
 		DirectStarter ds = null;
 		
-		if(isRateAdjust){
-			Map<String, Double> ratesBackup = new HashMap<>();
-			
-			ratesBackup = new HashMap<>();
-			ratesBackup.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
-			ratesBackup.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
-			ratesBackup.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
-			ratesBackup.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
-			ratesBackup.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
-			ratesBackup.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
-			ratesBackup.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
-			ratesBackup.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
-			ratesBackup.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
-			ratesBackup.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
-			ratesBackup.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
-			ratesBackup.put("NEVER_CO_FROM_POSSESSED"            , 0.100d);
-			ratesBackup.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
-			ratesBackup.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
-			ratesBackup.put("TEAM_MEMBER_WOLF"                   , 0.500d);
-			
-			while(true){
-				rateAdjust(players, ratesBackup, "VOTE_POSSESSED_TO_WEREWOLF"         );
-				rateAdjust(players, ratesBackup, "VOTE_WEREWOLF_TO_POSSESSED"         );
-				rateAdjust(players, ratesBackup, "VOTE_WEREWOLF_TO_WEREWOLF"          );
-				rateAdjust(players, ratesBackup, "FALSE_INQUESTED_FROM_VILLAGER_TEAM" );
-				rateAdjust(players, ratesBackup, "FALSE_DIVINED_FROM_VILLAGER_TEAM"   );
-				rateAdjust(players, ratesBackup, "BLACK_DIVINED_POSSESSED_TO_WEREWOLF");
-				rateAdjust(players, ratesBackup, "BLACK_DIVINED_WEREWOLF_TO_POSSESSED");
-				rateAdjust(players, ratesBackup, "BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" );
-				rateAdjust(players, ratesBackup, "2_SEER_CO_FROM_VILLGER_TEAM"        );
-				rateAdjust(players, ratesBackup, "2_MEDIUM_CO_FROM_VILLAGER_TEAM"     );
-				rateAdjust(players, ratesBackup, "2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  );
-				rateAdjust(players, ratesBackup, "NEVER_CO_FROM_POSSESSED"            );
-				rateAdjust(players, ratesBackup, "ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    );
-				rateAdjust(players, ratesBackup, "ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  );
+		if(IS_RATE_ADJUST_MODE){
+			if(IS_RATE_ADJUST_LOOP){
+				Map<String, Double> ratesBackup = new HashMap<>();
+				ratesBackup = new HashMap<>();
+				ratesBackup.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
+				ratesBackup.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
+				ratesBackup.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
+				ratesBackup.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
+				ratesBackup.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
+				ratesBackup.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
+				ratesBackup.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
+				ratesBackup.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
+				ratesBackup.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
+				ratesBackup.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
+				ratesBackup.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
+				ratesBackup.put("NEVER_CO_FROM_POSSESSED"            , 0.100d);
+				ratesBackup.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
+				ratesBackup.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
+				ratesBackup.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+				
+				while(true){
+					rateAdjust(players, ratesBackup, "VOTE_POSSESSED_TO_WEREWOLF"         );
+					rateAdjust(players, ratesBackup, "VOTE_WEREWOLF_TO_POSSESSED"         );
+					rateAdjust(players, ratesBackup, "VOTE_WEREWOLF_TO_WEREWOLF"          );
+					rateAdjust(players, ratesBackup, "FALSE_INQUESTED_FROM_VILLAGER_TEAM" );
+					rateAdjust(players, ratesBackup, "FALSE_DIVINED_FROM_VILLAGER_TEAM"   );
+					rateAdjust(players, ratesBackup, "BLACK_DIVINED_POSSESSED_TO_WEREWOLF");
+					rateAdjust(players, ratesBackup, "BLACK_DIVINED_WEREWOLF_TO_POSSESSED");
+					rateAdjust(players, ratesBackup, "BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" );
+					rateAdjust(players, ratesBackup, "2_SEER_CO_FROM_VILLGER_TEAM"        );
+					rateAdjust(players, ratesBackup, "2_MEDIUM_CO_FROM_VILLAGER_TEAM"     );
+					rateAdjust(players, ratesBackup, "2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  );
+					rateAdjust(players, ratesBackup, "NEVER_CO_FROM_POSSESSED"            );
+					rateAdjust(players, ratesBackup, "ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    );
+					rateAdjust(players, ratesBackup, "ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  );
+				}
+			} else {
+				Map<String, Double> rates = new HashMap<>();
+				rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
+				rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
+				rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.200d);
+				rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
+				rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.000d);
+				rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
+				rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.600d);
+				rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.500d);
+				rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
+				rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
+				rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.200d);
+				rates.put("NEVER_CO_FROM_POSSESSED"            , 1.000d);
+				rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
+				rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
+				rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+				ds = new DirectStarter(players, 100, 10, false, false, true, rates);
+				ds.start();
 			}
+			
 		} else {
 			ds = new DirectStarter(players, times, set, isVisualize, isLog, isSaveResult, null);
 			ds.start();
