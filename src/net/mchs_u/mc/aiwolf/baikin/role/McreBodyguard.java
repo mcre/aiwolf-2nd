@@ -7,8 +7,6 @@ import java.util.Map;
 import org.aiwolf.common.data.Agent;
 
 public class McreBodyguard extends McreVillager {
-	public static final int PATTERN_BODYGUARD = 0;
-
 	public McreBodyguard() {
 		super();
 	}

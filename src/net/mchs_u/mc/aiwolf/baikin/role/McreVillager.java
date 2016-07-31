@@ -7,9 +7,7 @@ import java.util.Map;
 import org.aiwolf.client.lib.TemplateTalkFactory;
 import org.aiwolf.common.data.Agent;
 
-public class McreVillager extends AbstractMcreRole {
-	public static final int PATTERN_VILLAGER = 0;
-	
+public class McreVillager extends AbstractMcreRole {	
 	protected Agent declareVotedTarget = null; //今日最後に投票宣言をした対象
 
 	public McreVillager() {

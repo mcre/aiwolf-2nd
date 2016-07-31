@@ -11,13 +11,9 @@ import org.aiwolf.common.data.Role;
 import org.aiwolf.common.net.GameInfo;
 import org.aiwolf.common.net.GameSetting;
 
+import net.mchs_u.mc.aiwolf.baikin.Constants;
+
 public class McreSeer extends McreVillager {
-	// 0 : 占っていない生存者のうち[自分]目線で最も人狼っぽい人を占う。占い師COした人はあとまわし。
-	// 1 : 占っていない生存者のうち[客観]目線で最も人狼っぽい人を占う。占い師COした人はあとまわし。
-	// 2 : 占っていない生存者のうち[自分]目線で最も人狼っぽい人を占う。占いCOした人も含む
-	// 3 : 占っていない生存者のうち[客観]目線で最も人狼っぽい人を占う。占いCOした人も含む
-	public static final int PATTERN_SEER = 0;
-	
 	private boolean co = false;
 	private boolean divinedToday = false;
 	private List<Agent> divinedList = null;
@@ -66,7 +62,7 @@ public class McreSeer extends McreVillager {
 	
 	@Override
 	public Agent divine() {
-		switch (PATTERN_SEER) {
+		switch (Constants.PATTERN_SEER) {
 		case 0:
 			return decideDivineTarget0();
 		case 1:

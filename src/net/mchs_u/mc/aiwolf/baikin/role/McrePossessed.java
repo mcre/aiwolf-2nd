@@ -12,8 +12,6 @@ import org.aiwolf.common.net.GameInfo;
 import org.aiwolf.common.net.GameSetting;
 
 public class McrePossessed extends AbstractMcreRole {
-	public static final int PATTERN_POSSESSED = 0;
-	
 	private Agent declaredVoteTarget = null; //今日最後に投票宣言をした対象
 	
 	private boolean co = false;

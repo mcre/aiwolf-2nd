@@ -6,9 +6,7 @@ import org.aiwolf.client.lib.TemplateTalkFactory;
 import org.aiwolf.common.data.Judge;
 import org.aiwolf.common.data.Role;
 
-public class McreMedium extends McreVillager {
-	public static final int PATTERN_MEDIUM = 0;
-	
+public class McreMedium extends McreVillager {	
 	private boolean co = false;
 	private boolean inquestedToday = false;
 

@@ -24,11 +24,12 @@ import net.mchs_u.mc.aiwolf.debug.EstimateGraph;
 import net.mchs_u.mc.aiwolf.starter.DirectStarter;
 
 public abstract class AbstractMcreRole extends AbstractRole {
+	private static final String RATE_ADJUST_PREFIX = "005_";
+	private static final String RATE_ADJUST_DIR = "./rate_adjust/";
+	
 	private static final boolean DEBUG_ESTIMATE_GRAPH = DirectStarter.IS_VISUALIZE;
 	private static final boolean DEBUG_ESTIMATE_PRINT = false;
 	private static final boolean IS_SAVE_RATE_ADJUST = DirectStarter.IS_RATE_ADJUST_MODE;
-	private static final String RATE_ADJUST_DIR = "./rate_adjust/";
-	private static final String RATE_ADJUST_PREFIX = "005_";
 	private StringBuffer montecarloOutput = null;
 	
 	protected List<Agent> agents = null;
