@@ -12,6 +12,12 @@ import org.aiwolf.common.net.GameInfo;
 import org.aiwolf.common.net.GameSetting;
 
 public class McreSeer extends McreVillager {
+	// 0 : 占っていない生存者のうち[自分]目線で最も人狼っぽい人を占う。占い師COした人はあとまわし。
+	// 1 : 占っていない生存者のうち[客観]目線で最も人狼っぽい人を占う。占い師COした人はあとまわし。
+	// 2 : 占っていない生存者のうち[自分]目線で最も人狼っぽい人を占う。占いCOした人も含む
+	// 3 : 占っていない生存者のうち[客観]目線で最も人狼っぽい人を占う。占いCOした人も含む
+	public static final int PATTERN_SEER = 0;
+	
 	private boolean co = false;
 	private boolean divinedToday = false;
 	private List<Agent> divinedList = null;
@@ -60,12 +66,21 @@ public class McreSeer extends McreVillager {
 	
 	@Override
 	public Agent divine() {
-		return decideDivineTarget();
+		switch (PATTERN_SEER) {
+		case 0:
+			return decideDivineTarget0();
+		case 1:
+			return decideDivineTarget1();
+		case 2:
+			return decideDivineTarget2();
+		case 3:
+			return decideDivineTarget3();
+		}
+		return null;
 	}
 	
-	//占い対象を決める
-	private Agent decideDivineTarget(){
-		//自分目線で、占っていない生存者のうち最も人狼っぽいひと
+	//占っていない生存者のうち自分目線で最も人狼っぽい人を占う。占い師COした人はあとまわし。
+	private Agent decideDivineTarget0(){
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
 		for(Agent a:divinedList){
@@ -83,6 +98,47 @@ public class McreSeer extends McreVillager {
 			return max(tmp, subjectiveEstimate.getWerewolfLikeness(), false);
 		else
 			return max(candidate, subjectiveEstimate.getWerewolfLikeness(), false);
+	}
+	
+	//占っていない生存者のうち客観目線で最も人狼っぽい人を占う。占い師COした人はあとまわし。
+	private Agent decideDivineTarget1(){
+		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
+		candidate.remove(getMe());
+		for(Agent a:divinedList){
+			candidate.remove(a);
+		}
+		
+		List<Agent> tmp = candidate;
+
+		//占い師COした人は除く
+		for(Agent a:objectiveEstimate.getCoSeerSet()){
+			candidate.remove(a);
+		}
+		if(candidate.size() == 0)
+			//誰も占う人が居ない場合のみ占い師COの人を占う
+			return max(tmp, objectiveEstimate.getWerewolfLikeness(), false);
+		else
+			return max(candidate, objectiveEstimate.getWerewolfLikeness(), false);
+	}
+	
+	//占っていない生存者のうち自分目線で最も人狼っぽい人を占う。占いCOした人も含む
+	private Agent decideDivineTarget2(){
+		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
+		candidate.remove(getMe());
+		for(Agent a:divinedList){
+			candidate.remove(a);
+		}
+		return max(candidate, subjectiveEstimate.getWerewolfLikeness(), false);
+	}
+	
+	//占っていない生存者のうち客観目線で最も人狼っぽい人を占う。占いCOした人も含む
+	private Agent decideDivineTarget3(){
+		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
+		candidate.remove(getMe());
+		for(Agent a:divinedList){
+			candidate.remove(a);
+		}
+		return max(candidate, objectiveEstimate.getWerewolfLikeness(), false);
 	}
 
 }

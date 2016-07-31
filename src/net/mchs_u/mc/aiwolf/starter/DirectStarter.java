@@ -246,6 +246,15 @@ public class DirectStarter {
 	public void result(int set, boolean isSave) throws IOException{
 		StringBuffer s = new StringBuffer();
 		
+		s.append("PATTERN_ESTIMATE = "  + net.mchs_u.mc.aiwolf.baikin.Estimate.PATTERN_ESTIMATE + "\n");
+		s.append("PATTERN_WEREWOLF = "  + net.mchs_u.mc.aiwolf.baikin.role.McreWerewolf.PATTERN_WEREWOLF + "\n");
+		s.append("PATTERN_POSSESSED = " + net.mchs_u.mc.aiwolf.baikin.role.McrePossessed.PATTERN_POSSESSED + "\n");
+		s.append("PATTERN_VILLAGER = "  + net.mchs_u.mc.aiwolf.baikin.role.McreVillager.PATTERN_VILLAGER + "\n");
+		s.append("PATTERN_SEER = "      + net.mchs_u.mc.aiwolf.baikin.role.McreSeer.PATTERN_SEER + "\n");
+		s.append("PATTERN_MEDIUM = "    + net.mchs_u.mc.aiwolf.baikin.role.McreMedium.PATTERN_MEDIUM + "\n");
+		s.append("PATTERN_BODYGUARD = " + net.mchs_u.mc.aiwolf.baikin.role.McreBodyguard.PATTERN_BODYGUARD + "\n");
+		s.append("\n");
+		
 		s.append("set : " + set + "\n");
 		/*
 		if(myAgentEstimateRates != null){

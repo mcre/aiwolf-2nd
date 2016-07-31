@@ -7,6 +7,8 @@ import org.aiwolf.common.data.Judge;
 import org.aiwolf.common.data.Role;
 
 public class McreMedium extends McreVillager {
+	public static final int PATTERN_MEDIUM = 0;
+	
 	private boolean co = false;
 	private boolean inquestedToday = false;
 
