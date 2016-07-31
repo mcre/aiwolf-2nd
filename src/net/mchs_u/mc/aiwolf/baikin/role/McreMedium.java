@@ -5,6 +5,8 @@ import java.util.Map;
 import org.aiwolf.client.lib.TemplateTalkFactory;
 import org.aiwolf.common.data.Judge;
 import org.aiwolf.common.data.Role;
+import org.aiwolf.common.net.GameInfo;
+import org.aiwolf.common.net.GameSetting;
 
 import net.mchs_u.mc.aiwolf.baikin.Constants;
 
@@ -18,6 +20,13 @@ public class McreMedium extends McreVillager {
 	
 	public McreMedium(Map<String,Double> estimateRates) {
 		super(estimateRates);
+	}
+	
+	@Override
+	public void initialize(GameInfo gameInfo, GameSetting gameSetting) {
+		super.initialize(gameInfo, gameSetting);
+
+		co = false;
 	}
 	
 	@Override

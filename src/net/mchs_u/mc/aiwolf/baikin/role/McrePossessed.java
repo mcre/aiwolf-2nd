@@ -30,6 +30,7 @@ public class McrePossessed extends AbstractMcreRole {
 	public void initialize(GameInfo gameInfo, GameSetting gameSetting) {
 		super.initialize(gameInfo, gameSetting);
 
+		co = false;
 		divinedList = new ArrayList<>();
 	}	
 	

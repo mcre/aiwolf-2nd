@@ -30,6 +30,7 @@ public class McreSeer extends McreVillager {
 	public void initialize(GameInfo gameInfo, GameSetting gameSetting) {
 		super.initialize(gameInfo, gameSetting);
 
+		co = false;
 		divinedList = new ArrayList<>();
 	}	
 	
