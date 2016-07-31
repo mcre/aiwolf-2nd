@@ -25,7 +25,7 @@ import net.mchs_u.mc.aiwolf.debug.EstimateGraph;
 import net.mchs_u.mc.aiwolf.starter.DirectStarter;
 
 public abstract class AbstractMcreRole extends AbstractRole {
-	private static final String RATE_ADJUST_PREFIX = "005_";
+	private static final String RATE_ADJUST_PREFIX = "006_";
 	private static final String RATE_ADJUST_DIR = "./rate_adjust/";
 	
 	private static final boolean DEBUG_ESTIMATE_GRAPH = DirectStarter.IS_VISUALIZE;
