@@ -250,6 +250,21 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		return ret;
 	}
 	
+	//しんだひとをリストから除く
+	protected List<Agent> removeDeadAgent(Collection<Agent> agents){
+		List<Agent> ret = new ArrayList<>();
+		List<Agent> aliveList = getLatestDayGameInfo().getAliveAgentList();
+		for(Agent a: agents){
+			for(Agent al: aliveList){
+				if(a.getAgentIdx() == al.getAgentIdx()){
+					ret.add(a);
+					break;
+				}
+			}
+		}
+		return ret;
+	}
+	
 	private void initDebugEstimateGraph(){
 		if(DEBUG_ESTIMATE_GRAPH){
 			estimateGraphs = new ArrayList<>();
