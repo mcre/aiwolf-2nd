@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -207,11 +208,13 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		return agents.get(num);
 	}
 	
-	protected Agent min(List<Agent> candidate, Map<Agent, Double> likeness, boolean plus){
+	protected Agent min(Collection<Agent> candidate, Map<Agent, Double> likeness, boolean plus){//村人らしさの場合true,人狼らしさの場合false
+		List<Agent> candidateList = new ArrayList<Agent>(candidate); 
+		
 		Agent ret = null;
 		double min = 2d;
-		for(int i = 0; i < candidate.size(); i++){
-			Agent a = candidate.get(i);
+		for(int i = 0; i < candidateList.size(); i++){
+			Agent a = candidateList.get(i);
 			double l = likeness.get(a);
 			if(plus)
 				l += random.get(i);
@@ -226,11 +229,13 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		return ret;
 	}
 	
-	protected Agent max(List<Agent> candidate, Map<Agent, Double> likeness, boolean plus){//村人らしさをプラス、人狼らしさをマイナス
+	protected Agent max(Collection<Agent> candidate, Map<Agent, Double> likeness, boolean plus){//村人らしさの場合true,人狼らしさの場合false
+		List<Agent> candidateList = new ArrayList<Agent>(candidate); 
+		
 		Agent ret = null;
 		double max = -1;
-		for(int i = 0; i < candidate.size(); i++){
-			Agent a = candidate.get(i);
+		for(int i = 0; i < candidateList.size(); i++){
+			Agent a = candidateList.get(i);
 			double l = likeness.get(a);
 			if(plus)
 				l += random.get(i);
