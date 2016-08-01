@@ -96,14 +96,17 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		
 		GameInfo info = getLatestDayGameInfo();
 		
+		objectiveEstimate.dayStart();
 		objectiveEstimate.updateAliveAgentList(info.getAliveAgentList());
 		objectiveEstimate.updateAttackedAgent(info.getAttackedAgent());
 		objectiveEstimate.updateVoteList(info.getVoteList());
 		
+		subjectiveEstimate.dayStart();
 		subjectiveEstimate.updateAliveAgentList(info.getAliveAgentList());
 		subjectiveEstimate.updateAttackedAgent(info.getAttackedAgent());
 		subjectiveEstimate.updateVoteList(info.getVoteList());
 
+		pretendVillagerEstimate.dayStart();
 		pretendVillagerEstimate.updateAliveAgentList(info.getAliveAgentList());
 		pretendVillagerEstimate.updateAttackedAgent(info.getAttackedAgent());
 		pretendVillagerEstimate.updateVoteList(info.getVoteList());

@@ -1,6 +1,7 @@
 package net.mchs_u.mc.aiwolf.baikin.role;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -11,20 +12,17 @@ import org.aiwolf.common.data.Species;
 import org.aiwolf.common.net.GameInfo;
 import org.aiwolf.common.net.GameSetting;
 
-import net.mchs_u.mc.aiwolf.baikin.Constants;
-
-public class McrePossessed extends AbstractMcreRole {
-	private Agent declaredVoteTarget = null; //今日最後に投票宣言をした対象
-	
+//占い師が人狼じゃない側から1人しか出ない場合は占い師CO、あとは狂人のパターン0と同様
+public class McreWerewolfB extends McreWerewolfA {
 	private boolean co = false;
 	private boolean divinedToday = false;
 	private List<Agent> divinedList = null;
-
-	public McrePossessed() {
+	
+	public McreWerewolfB() {
 		super();
 	}
 	
-	public McrePossessed(Map<String,Double> estimateRates) {
+	public McreWerewolfB(Map<String,Double> estimateRates) {
 		super(estimateRates);
 	}
 	
@@ -34,37 +32,33 @@ public class McrePossessed extends AbstractMcreRole {
 
 		co = false;
 		divinedList = new ArrayList<>();
-	}	
+	}
 	
 	@Override
 	public void dayStart() {
 		super.dayStart();
 		divinedToday = false;
-		declaredVoteTarget = null;
 	}
 	
 	@Override
 	public String talk() {
-		//COしてない場合はCO
-		if(!co){
+		Collection<Agent> coSeerSet = pretendVillagerEstimate.getCoSeerSet();
+		for(Agent a: getWolfList())
+			coSeerSet.remove(a);
+		//1日目以降で、COしてなくて、占い師COが人狼じゃない側で1人以下のとき占い師CO
+		if(getDay() > 0 && !co && coSeerSet.size() <= 1){
 			co = true;
 			return TemplateTalkFactory.comingout(getMe(), Role.SEER);
 		}
 		
-		//占い結果を言ってなければ占い
-		if(getDay()>0 && !divinedToday){
+		//coしてて占い結果を言ってなければ占い
+		if(co && getDay()>0 && !divinedToday){
 			divinedToday = true;
 			Agent target = decideDivineTarget();
 			if(target != null){
 				divinedList.add(target);
 				pretendVillagerEstimate.updateDefinedSpecies(target, Species.HUMAN);//村人目線に占い情報を更新
-				switch (Constants.PATTERN_POSSESSED) {
-				case 0:
-					return TemplateTalkFactory.divined(target, Species.HUMAN);
-				case 1:
-					return TemplateTalkFactory.divined(target, Species.WEREWOLF);
-				}
-				return null;
+				return TemplateTalkFactory.divined(target, Species.HUMAN);
 			}
 		}
 		
@@ -79,19 +73,8 @@ public class McrePossessed extends AbstractMcreRole {
 		return TemplateTalkFactory.vote(target);
 	}
 	
-	@Override
-	public Agent vote() {
-		return decideVoteTarget();
-	}
-	
 	private Agent decideDivineTarget(){
-		switch (Constants.PATTERN_POSSESSED) {
-		case 0:
-			return decideDivineTargetA();
-		case 1:
-			return decideDivineTargetB();
-		}
-		return null;
+		return decideDivineTargetA();
 	}
 
 	//村人目線で最も人狼っぽい人を占って白出し
@@ -103,23 +86,6 @@ public class McrePossessed extends AbstractMcreRole {
 		}
 		return max(candidate, pretendVillagerEstimate.getWerewolfLikeness(), false);
 	}
-	
-	//自分目線で最も人間っぽい人を占って黒出し
-	private Agent decideDivineTargetB(){
-		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
-		candidate.remove(getMe());
-		for(Agent a:divinedList){
-			candidate.remove(a);
-		}
-		return max(candidate, subjectiveEstimate.getVillagerTeamLikeness(), true);
-	}
-	
-	//村人目線で、生存者のうち最も人狼っぽいひとに投票
-	private Agent decideVoteTarget(){
-		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
-		candidate.remove(getMe());
-		
-		return max(candidate, pretendVillagerEstimate.getWerewolfLikeness(), false);
-	}
+
 
 }

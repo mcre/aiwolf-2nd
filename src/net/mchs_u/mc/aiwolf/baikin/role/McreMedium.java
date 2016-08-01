@@ -39,15 +39,15 @@ public class McreMedium extends McreVillager {
 	public String talk() {
 		switch (Constants.PATTERN_MEDIUM) {
 		case 0:
-			return talk0();
+			return talkA();
 		case 1:
-			return talk1();
+			return talkB();
 		}
 		return null;
 	}
 	
 	//0日目CO
-	private String talk0(){
+	private String talkA(){
 		//COしてない場合はCO
 		if(!co){
 			co = true;
@@ -67,7 +67,7 @@ public class McreMedium extends McreVillager {
 	}
 	
 	//霊能結果があるとき初めてCO
-	private String talk1(){
+	private String talkB(){
 		Judge j = getLatestDayGameInfo().getMediumResult();
 		
 		//COしてなくて霊能結果があればCO

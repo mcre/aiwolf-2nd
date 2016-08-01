@@ -21,26 +21,26 @@ public class McreBodyguard extends McreVillager {
 	public Agent guard() {
 		switch (Constants.PATTERN_BODYGUARD) {
 		case 0:
-			return decideGuardTarget0();
+			return decideGuardTargetA();
 		case 1:
-			return decideGuardTarget1();
+			return decideGuardTargetB();
 		case 2:
-			return decideGuardTarget2();
+			return decideGuardTargetC();
 		case 3:
-			return decideGuardTarget3();
+			return decideGuardTargetD();
 		}
 		return null;
 	}
 
 	//生存者のうち、自分目線で最も村人陣営っぽいひと
-	private Agent decideGuardTarget0(){
+	private Agent decideGuardTargetA(){
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
 		return max(candidate, subjectiveEstimate.getVillagerTeamLikeness(), true);
 	}
 
 	//生存者のうち、占い師COで自分目線で最も村人陣営っぽい人、いなければ同様に霊能CO、いなければ全体から
-	private Agent decideGuardTarget1(){
+	private Agent decideGuardTargetB(){
 		List<Agent> coSeerSet = removeDeadAgent(subjectiveEstimate.getCoSeerSet());
 		if(!coSeerSet.isEmpty()){
 			return max(coSeerSet, subjectiveEstimate.getVillagerTeamLikeness(), true);
@@ -51,18 +51,18 @@ public class McreBodyguard extends McreVillager {
 			return max(coMediumSet, subjectiveEstimate.getVillagerTeamLikeness(), true);
 		}
 		
-		return decideGuardTarget0();
+		return decideGuardTargetA();
 	}
 	
 	//生存者のうち、自分目線で最も狼っぽくないひと
-	private Agent decideGuardTarget2(){
+	private Agent decideGuardTargetC(){
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
 		return min(candidate, subjectiveEstimate.getWerewolfLikeness(), false);
 	}
 	
 	//生存者のうち、占い師COで自分目線で最も狼っぽくない人、いなければ同様に霊能CO、いなければ全体から
-	private Agent decideGuardTarget3(){
+	private Agent decideGuardTargetD(){
 		List<Agent> coSeerSet = removeDeadAgent(subjectiveEstimate.getCoSeerSet());
 		if(!coSeerSet.isEmpty()){
 			return min(coSeerSet, subjectiveEstimate.getWerewolfLikeness(), false);
@@ -73,7 +73,7 @@ public class McreBodyguard extends McreVillager {
 			return min(coMediumSet, subjectiveEstimate.getWerewolfLikeness(), false);
 		}
 		
-		return decideGuardTarget2();
+		return decideGuardTargetC();
 	}
 	
 	

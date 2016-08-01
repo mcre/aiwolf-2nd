@@ -1,5 +1,6 @@
 package net.mchs_u.mc.aiwolf.baikin;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,6 +30,7 @@ public class Estimate {
 	
 	private Map<Agent, Double> werewolfLikeness = null;
 	private Map<Agent, Double> villagerTeamLikeness = null;
+	private Map<Agent, Agent> todaysVotePlanMap = null;
 	
 	public Estimate(List<Agent> agents, Agent me) {
 		this(agents,me,Constants.getDefaultRates());
@@ -66,6 +68,10 @@ public class Estimate {
 		for(RoleCombination rc: probabilities.keySet()){
 			update(rc, "NEVER_CO_FROM_POSSESSED");
 		}
+	}
+	
+	public void dayStart(){
+		todaysVotePlanMap = new HashMap<>();
 	}
 	
 	public Map<Agent, Double> getWerewolfLikeness() {
@@ -304,6 +310,9 @@ public class Estimate {
 				}
 			}
 			break;
+		case VOTE:
+			todaysVotePlanMap.put(talk.getAgent(), ut.getTarget());
+			break;
 		default:
 			break;
 		}
@@ -358,24 +367,40 @@ public class Estimate {
 		return coSeerSet;
 	}
 
-	public void setCoSeerSet(Set<Agent> coSeerSet) {
-		this.coSeerSet = coSeerSet;
-	}
-
 	public Set<Agent> getCoMediumSet() {
 		return coMediumSet;
-	}
-
-	public void setCoMediumSet(Set<Agent> coMediumSet) {
-		this.coMediumSet = coMediumSet;
 	}
 
 	public Set<Agent> getCoBodyguardSet() {
 		return coBodyguardSet;
 	}
-
-	public void setCoBodyguardSet(Set<Agent> coBodyguardSet) {
-		this.coBodyguardSet = coBodyguardSet;
+	
+	public List<Agent> getMostVotePlanedAgents(){
+		List<Agent> ret = new ArrayList<>();
+		Map<Agent, Integer> count = new HashMap<>();
+		for(Agent a: todaysVotePlanMap.values()){
+			if(!count.containsKey(a)){
+				count.put(a, 1);
+			} else {
+				count.put(a, count.get(a) + 1);
+			}
+		}
+		
+		int max = -1;
+		for(int x: count.values()){
+			if(max < x){
+				max = x;
+			}
+		}
+		
+		for(Agent a: count.keySet()){
+			if(count.get(a) == max){
+				ret.add(a);
+			}
+		}
+		
+		return ret;
 	}
+
 	
 }

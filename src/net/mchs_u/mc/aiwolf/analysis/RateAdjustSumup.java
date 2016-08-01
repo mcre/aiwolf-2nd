@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class RateAdjustSumup {
 	private static final String RATE_ADJUST_DIR = "./rate_adjust/";
-	private static final String RATE_ADJUST_PREFIX = "005_";
+	private static final String RATE_ADJUST_PREFIX = "006_";//Coしないバグ修正後
 
 	private Map<Integer, Map<String, Double>>  scoreSums = null;
 	private Map<String, Integer> counts = null;
