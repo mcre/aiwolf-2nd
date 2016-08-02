@@ -38,7 +38,7 @@ public class DirectStarter {
 	
 	public static final boolean IS_RATE_ADJUST_LOOP = false;
 
-	public static final Role ROLE = Role.WEREWOLF;
+	public static final Role ROLE = Role.POSSESSED;
 	//public static final Role ROLE = null;
 	
 	private static final String LOG_DIR = "./log/";

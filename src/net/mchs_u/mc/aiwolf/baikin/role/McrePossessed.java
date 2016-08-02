@@ -90,6 +90,8 @@ public class McrePossessed extends AbstractMcreRole {
 			return decideDivineTargetA();
 		case 1:
 			return decideDivineTargetB();
+		case 2:
+			return decideDivineTargetC();
 		}
 		return null;
 	}
@@ -105,7 +107,20 @@ public class McrePossessed extends AbstractMcreRole {
 	}
 	
 	//自分目線で最も人間っぽい人を占って黒出し
-	private Agent decideDivineTargetB(){
+	private Agent decideDivineTargetB(){		
+		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
+		candidate.remove(getMe());
+		for(Agent a:divinedList){
+			candidate.remove(a);
+		}
+		return max(candidate, subjectiveEstimate.getVillagerTeamLikeness(), true);
+	}
+
+	//自分目線で最も人間っぽい人を占って黒出し(3人まで)
+	private Agent decideDivineTargetC(){
+		if(divinedList.size() >= 3)//3人黒出ししたらもう占わない
+			return null;
+		
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
 		for(Agent a:divinedList){
