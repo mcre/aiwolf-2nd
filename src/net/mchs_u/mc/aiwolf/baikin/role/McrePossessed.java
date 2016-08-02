@@ -63,6 +63,10 @@ public class McrePossessed extends AbstractMcreRole {
 					return TemplateTalkFactory.divined(target, Species.HUMAN);
 				case 1:
 					return TemplateTalkFactory.divined(target, Species.WEREWOLF);
+				case 2:
+					return TemplateTalkFactory.divined(target, Species.WEREWOLF);
+				case 3:
+					return TemplateTalkFactory.divined(target, Species.WEREWOLF);
 				}
 				return null;
 			}
@@ -85,6 +89,7 @@ public class McrePossessed extends AbstractMcreRole {
 	}
 	
 	private Agent decideDivineTarget(){
+		//CASE変えるところもう一個あるので注意
 		switch (Constants.PATTERN_POSSESSED) {
 		case 0:
 			return decideDivineTargetA();
@@ -92,6 +97,8 @@ public class McrePossessed extends AbstractMcreRole {
 			return decideDivineTargetB();
 		case 2:
 			return decideDivineTargetC();
+		case 3:
+			return decideDivineTargetD();
 		}
 		return null;
 	}
@@ -124,6 +131,25 @@ public class McrePossessed extends AbstractMcreRole {
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
 		for(Agent a:divinedList){
+			candidate.remove(a);
+		}
+		return max(candidate, subjectiveEstimate.getVillagerTeamLikeness(), true);
+	}
+	
+	//自分目線で最も人間っぽい人を占って黒出し(3人まで)、ただし占霊COの人を除く
+	private Agent decideDivineTargetD(){
+		if(divinedList.size() >= 3)//3人黒出ししたらもう占わない
+			return null;
+		
+		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
+		candidate.remove(getMe());
+		for(Agent a: divinedList){
+			candidate.remove(a);
+		}
+		for(Agent a: subjectiveEstimate.getCoMediumSet()){
+			candidate.remove(a);
+		}
+		for(Agent a: subjectiveEstimate.getCoSeerSet()){
 			candidate.remove(a);
 		}
 		return max(candidate, subjectiveEstimate.getVillagerTeamLikeness(), true);
