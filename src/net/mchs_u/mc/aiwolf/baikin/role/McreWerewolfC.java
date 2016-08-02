@@ -13,6 +13,7 @@ import org.aiwolf.common.net.GameSetting;
 
 public class McreWerewolfC extends McreWerewolfA {	
 	private boolean co = false;
+	private boolean divinedToday = false;
 	private List<Agent> divinedList = null;
 	
 	public McreWerewolfC() {
@@ -29,6 +30,7 @@ public class McreWerewolfC extends McreWerewolfA {
 
 		co = false;
 		divinedList = new ArrayList<>();
+		divinedToday = false;
 	}
 	
 	@Override
@@ -39,18 +41,14 @@ public class McreWerewolfC extends McreWerewolfA {
 			return TemplateTalkFactory.comingout(getMe(), Role.SEER);
 		}
 		
-		//coしてたらひたすら占い
-		if(co && getDay() > 0 ){
+		//coしてて今日占い結果を言ってなければ占い
+		if(co && getDay() > 0  && !divinedToday){
+			divinedToday = true;
 			Agent target = decideDivineTarget();
 			if(target != null){
 				divinedList.add(target);
-				if(getWolfList().contains(target)){
-					pretendVillagerEstimate.updateDefinedSpecies(target, Species.HUMAN);//村人目線に占い情報を更新
-					return TemplateTalkFactory.divined(target, Species.HUMAN);
-				} else {
-					pretendVillagerEstimate.updateDefinedSpecies(target, Species.WEREWOLF);//村人目線に占い情報を更新
-					return TemplateTalkFactory.divined(target, Species.WEREWOLF);	
-				}
+				pretendVillagerEstimate.updateDefinedSpecies(target, Species.WEREWOLF);//村人目線に占い情報を更新
+				return TemplateTalkFactory.divined(target, Species.WEREWOLF);	
 			}
 		}
 		
@@ -66,16 +64,19 @@ public class McreWerewolfC extends McreWerewolfA {
 	}
 	
 	private Agent decideDivineTarget(){
+		if(divinedList.size() >= 3)//3人黒出ししたらもう占わない
+			return null;
+		
 		List<Agent> candidate = new ArrayList<>(getLatestDayGameInfo().getAliveAgentList());
 		candidate.remove(getMe());
-		for(Agent a:divinedList){
+		
+		for(Agent a: divinedList){
 			candidate.remove(a);
 		}
-		for(Agent a:candidate){
-			if(getWolfList().contains(a)){
-				return a;
-			}
+		for(Agent a: getWolfList()){
+			candidate.remove(a);
 		}
+		
 		return max(candidate, pretendVillagerEstimate.getWerewolfLikeness(), false);
 	}
 

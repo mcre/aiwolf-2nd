@@ -33,15 +33,13 @@ import org.aiwolf.ui.util.AgentLibraryReader;
  */
 @SuppressWarnings("deprecation")
 public class DirectStarter {
-	public static final boolean IS_VISUALIZE  = false; // TODO 大会時はFALSE
+	public static final boolean IS_VISUALIZE  = true; // TODO 大会時はFALSE
 	public static final boolean IS_RATE_ADJUST_MODE = false; // TODO 大会時はFALSE
 	
 	public static final boolean IS_RATE_ADJUST_LOOP = false;
 
-	//public static final Role ROLE = Role.SEER;
-	//public static final Role ROLE = Role.BODYGUARD;
-	//public static final Role ROLE = Role.MEDIUM;
-	public static final Role ROLE = null;
+	public static final Role ROLE = Role.WEREWOLF;
+	//public static final Role ROLE = null;
 	
 	private static final String LOG_DIR = "./log/";
 	private static final String RESULT_DIR = "./result/";

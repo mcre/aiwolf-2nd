@@ -9,7 +9,7 @@ public class Constants {
 	 * 0 : cashさんのそのまま
 	 * 1 : ver20160730 cashさんのベースにちょっと確率調整したもの。役職正解率は上がるけど、勝率はほぼ変わらない
 	 */
-	public static final int PATTERN_ESTIMATE = 0;
+	public static final int PATTERN_ESTIMATE = 1;
 	
 	/* -- Werewolf 人狼
 	 * 0 : COしない・客観目線で人狼らしくない人を襲撃・村人目線で最も人狼っぽい人に投票
@@ -17,15 +17,15 @@ public class Constants {
 	 * 2 : COしない・占いCOのうち自分目線で人間らしい人を襲撃、いなければ客観目線で人狼らしくない人を襲撃（ただし投票宣言Targetが多い人を除く）・村人目線で最も人狼っぽい人に投票
 	 * 3 : COしない・霊能COのうち自分目線で人間らしい人を襲撃、いなければ客観目線で人狼らしくない人を襲撃（ただし投票宣言Targetが多い人を除く）・村人目線で最も人狼っぽい人に投票
 	 * 4 : 占い師が人狼じゃない側から1人しか出ない場合は占い師CO、あとは狂人のパターン0と同様・客観目線で人狼らしくない人を襲撃
-	 * 5 : 0日目占い師CO、占い回数を無視して占い結果を言いまくる(自分以外の人狼を白と言いまくり、村人を黒と言いまくる)。あとはパターン0と同じ //もし強くてもつかわないほうがいいんじゃ・・・
+	 * 5 : 0日目占い師CO、1日ずつ村人3人を黒と言う。あとはパターン0と同じ
 	 */
-	public static final int PATTERN_WEREWOLF = 0;
+	public static final int PATTERN_WEREWOLF = 5;
 	
 	/* -- Possessed 狂人
 	 * 0 : 0日目占い師CO、[村人]目線で最も[人狼]っぽい人を占って[白]出し・村人目線で最も人狼っぽい人に投票
 	 * 1 : 0日目占い師CO、[自分]目線で最も[人間]っぽい人を占って[黒]出し・村人目線で最も人狼っぽい人に投票
 	 */
-	public static final int PATTERN_POSSESSED = 0;		
+	public static final int PATTERN_POSSESSED = 1;	
 
 	/* -- Villager 村人
 	 * 0 : [自分]目線で最も[人狼っぽい]ひとに投票
@@ -42,7 +42,7 @@ public class Constants {
 	 * 3 : [客観]目線で最も人狼っぽい人を占う。占いCOした人も[含む]
 	 * 4 : 占い結果が出たとき初めてCO。あとはPattern0と同じ。
 	 */
-	public static final int PATTERN_SEER = 0;
+	public static final int PATTERN_SEER = 1;
 	
 	/* -- BodyGuard 狩人
 	 * 0 : 自分目線で最も[村人陣営っぽい]ひとを護衛
@@ -50,13 +50,13 @@ public class Constants {
 	 * 2 : 自分目線で最も[狼っぽくない]ひとを護衛
 	 * 3 : 占い師COで自分目線で最も[狼っぽくない]人、いなければ同様に霊能CO、いなければ全体から護衛
 	 */
-	public static final int PATTERN_BODYGUARD = 0;
+	public static final int PATTERN_BODYGUARD = 1;
 	
 	/* -- Medium 霊能
 	 * 0 : 0日目CO
 	 * 1 : 霊能結果があるとき初めてCO
 	 */
-	public static final int PATTERN_MEDIUM = 0;
+	public static final int PATTERN_MEDIUM = 1;
 	
 	public static Map<String,Double> getDefaultRates(){
 		Map<String,Double> rates = new HashMap<>();
