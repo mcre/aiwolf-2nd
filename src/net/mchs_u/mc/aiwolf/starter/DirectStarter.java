@@ -33,13 +33,13 @@ import org.aiwolf.ui.util.AgentLibraryReader;
  */
 @SuppressWarnings("deprecation")
 public class DirectStarter {
-	public static final boolean IS_VISUALIZE  = true; // TODO 大会時はFALSE
+	public static final boolean IS_VISUALIZE  = false; // TODO 大会時はFALSE
 	public static final boolean IS_RATE_ADJUST_MODE = false; // TODO 大会時はFALSE
 	
 	public static final boolean IS_RATE_ADJUST_LOOP = false;
 
-	public static final Role ROLE = Role.POSSESSED;
-	//public static final Role ROLE = null;
+	//public static final Role ROLE = Role.POSSESSED;
+	public static final Role ROLE = null;
 	
 	private static final String LOG_DIR = "./log/";
 	private static final String RESULT_DIR = "./result/";
@@ -305,7 +305,7 @@ public class DirectStarter {
 		System.out.println(s.toString());
 		
 		if(isSave){
-			try(FileWriter fw = new FileWriter(new File(RESULT_DIR + (new Date()).getTime() + ".txt"))){
+			try(FileWriter fw = new FileWriter(new File(RESULT_DIR + (new Date()).getTime() + "_" + String.format("%05d", set) + ".txt"))){
 				fw.write(s.toString());
 			}
 		}
