@@ -13,7 +13,7 @@ public class Constants {
 	 * 2 : ver20160804 cashさんのとほぼ一緒だけどNeverCoのみ消したもの。RateAdjustの成績は一番よかったやつ
 	 * 3 : ver20160804 人狼のみパターン0、ほかはパターン2
 	 */
-	public static final int PATTERN_ESTIMATE = 3;
+	public static final int PATTERN_ESTIMATE = 2;
 	
 	/* -- Werewolf 人狼
 	 * 0 : COしない・客観目線で人狼らしくない人を襲撃・村人目線で最も人狼っぽい人に投票(？)
