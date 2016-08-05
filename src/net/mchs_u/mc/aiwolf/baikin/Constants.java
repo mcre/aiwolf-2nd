@@ -3,7 +3,7 @@ package net.mchs_u.mc.aiwolf.baikin;
 import java.util.HashMap;
 import java.util.Map;
 
-// MEMO 1213000
+import org.aiwolf.common.data.Role;
 
 //gitの修正がいっぱい出るのが嫌なのでよく変える定数はまとめる
 public class Constants {
@@ -11,8 +11,9 @@ public class Constants {
 	 * 0 : cashさんのそのまま
 	 * 1 : ver20160730 cashさんのベースにちょっと確率調整したもの。役職正解率は上がるけど、勝率はほぼ変わらない
 	 * 2 : ver20160804 cashさんのとほぼ一緒だけどNeverCoのみ消したもの。RateAdjustの成績は一番よかったやつ
+	 * 3 : ver20160804 人狼のみパターン0、ほかはパターン2
 	 */
-	public static final int PATTERN_ESTIMATE = 2;
+	public static final int PATTERN_ESTIMATE = 3;
 	
 	/* -- Werewolf 人狼
 	 * 0 : COしない・客観目線で人狼らしくない人を襲撃・村人目線で最も人狼っぽい人に投票(？)
@@ -22,7 +23,7 @@ public class Constants {
 	 * 4 : 占い師が人狼じゃない側から1人しか出ない場合は占い師CO、あとは狂人のパターン0と同様・客観目線で人狼らしくない人を襲撃(×)
 	 * 5 : 0日目占い師CO、1日ずつ村人3人を黒出し。あとはパターン0と同じ(×)
 	 */
-	public static final int PATTERN_WEREWOLF = 3;
+	public static final int PATTERN_WEREWOLF = 0;
 	
 	/* -- Possessed 狂人 
 	 * 0 : 0日目占い師CO、[村人]目線で最も[人狼]っぽい人を占って[白]出し・村人目線で最も人狼っぽい人に投票
@@ -63,7 +64,7 @@ public class Constants {
 	 */
 	public static final int PATTERN_BODYGUARD = 0;
 	
-	public static Map<String,Double> getDefaultRates(){
+	public static Map<String,Double> getDefaultRates(Role myRole){
 		Map<String,Double> rates = new HashMap<>();
 
 		switch(PATTERN_ESTIMATE){
@@ -117,6 +118,26 @@ public class Constants {
 			rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
 			rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
 			rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+			break;
+		case 3:
+			rates.put("VOTE_POSSESSED_TO_WEREWOLF"         , 0.900d);
+			rates.put("VOTE_WEREWOLF_TO_POSSESSED"         , 0.900d);
+			rates.put("VOTE_WEREWOLF_TO_WEREWOLF"          , 0.900d);
+			rates.put("FALSE_INQUESTED_FROM_VILLAGER_TEAM" , 0.010d);
+			rates.put("FALSE_DIVINED_FROM_VILLAGER_TEAM"   , 0.010d);
+			rates.put("BLACK_DIVINED_POSSESSED_TO_WEREWOLF", 0.900d);
+			rates.put("BLACK_DIVINED_WEREWOLF_TO_POSSESSED", 0.500d);
+			rates.put("BLACK_DIVINED_WEREWOLF_TO_WEREWOLF" , 0.100d);
+			rates.put("2_SEER_CO_FROM_VILLGER_TEAM"        , 0.001d);
+			rates.put("2_MEDIUM_CO_FROM_VILLAGER_TEAM"     , 0.001d);
+			rates.put("2_BODYGUARD_CO_FROM_VILLAGER_TEAM"  , 0.001d);
+			rates.put("ONLY_SEER_CO_FROM_WEREWOLF_TEAM"    , 0.010d);
+			rates.put("ONLY_MEDIUM_CO_FROM_WEREWOLF_TEAM"  , 0.010d);
+			rates.put("TEAM_MEMBER_WOLF"                   , 0.500d);
+			if(myRole == Role.WEREWOLF)
+				rates.put("NEVER_CO_FROM_POSSESSED"            , 0.100d);
+			else
+				rates.put("NEVER_CO_FROM_POSSESSED"            , 1.000d);
 			break;
 		}
 		

@@ -32,8 +32,8 @@ public class Estimate {
 	private Map<Agent, Double> villagerTeamLikeness = null;
 	private Map<Agent, Agent> todaysVotePlanMap = null;
 	
-	public Estimate(List<Agent> agents, Agent me) {
-		this(agents,me,Constants.getDefaultRates());
+	public Estimate(List<Agent> agents, Agent me, Role myRole) {
+		this(agents, me, Constants.getDefaultRates(myRole) );
 	}
 	
 	public Estimate(List<Agent> agents, Agent me, Map<String,Double> rates) {

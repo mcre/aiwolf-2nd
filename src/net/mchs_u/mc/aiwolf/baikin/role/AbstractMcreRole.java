@@ -61,9 +61,9 @@ public abstract class AbstractMcreRole extends AbstractRole {
 		agents = gameInfo.getAgentList();
 
 		if(estimateRates == null){
-			objectiveEstimate = new Estimate(agents, getMe());
-			subjectiveEstimate = new Estimate(agents, getMe());
-			pretendVillagerEstimate = new Estimate(agents, getMe());
+			objectiveEstimate = new Estimate(agents, getMe(), getMyRole());
+			subjectiveEstimate = new Estimate(agents, getMe(), getMyRole());
+			pretendVillagerEstimate = new Estimate(agents, getMe(), getMyRole());
 		} else {
 			objectiveEstimate = new Estimate(agents, getMe(), estimateRates);
 			subjectiveEstimate = new Estimate(agents, getMe(), estimateRates);
